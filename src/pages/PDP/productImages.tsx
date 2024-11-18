@@ -28,14 +28,14 @@ class ProductImages extends React.Component<{}, State> {
   render(): React.ReactNode {
     return (
       <div className="grid grid-cols-[auto,1fr] gap-x-10">
-        <div className="flex flex-col gap-5 bg-yellow-200">
+        <div className="flex flex-col gap-5  max-h-[50vh] overflow-y-auto">
           {imageLinks.map((link, index) => (
             <div
               key={index}
-              className={`w-20 h-20 cursor-pointer transition-all duration-300 ${
+              className={`flex-shrink-0 w-20 h-20 cursor-pointer transition-all duration-300 ${
                 this.state.selectedImageIndex === index
-                  ? "ring-2 ring-[#5ECE7B] scale-110"
-                  : "scale-100"
+                  ? "border-2 border-[#5ECE7B]"
+                  : ""
               }`}
               onClick={() => {
                 this.setState({ selectedImageIndex: index });
