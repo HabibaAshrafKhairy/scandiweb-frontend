@@ -1,4 +1,5 @@
 import React from "react";
+import leftArrow from "../../assets/arrow-left.svg";
 
 // Array of working product image links
 const imageLinks = [
@@ -6,6 +7,11 @@ const imageLinks = [
   "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400", // Jacket
   "https://images.unsplash.com/photo-1560807707-8cc77767d783?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400", // T-shirt
   "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400", // Jacket
+  "https://images.unsplash.com/photo-1519638399535-1b036603ac77?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400", // Sneakers
+  "https://images.unsplash.com/photo-1519638399535-1b036603ac77?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400", // Sneakers
+  "https://images.unsplash.com/photo-1519638399535-1b036603ac77?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400", // Sneakers
+  "https://images.unsplash.com/photo-1519638399535-1b036603ac77?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400", // Sneakers
+  "https://images.unsplash.com/photo-1519638399535-1b036603ac77?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400", // Sneakers
   "https://images.unsplash.com/photo-1519638399535-1b036603ac77?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400", // Sneakers
 ];
 
@@ -44,12 +50,42 @@ class ProductImages extends React.Component<{}, State> {
           ))}
         </div>
 
-        <div className="w-full h-full bg-red-300">
+        <div className="w-full max-h-[50vh] aspect-square bg-[#fcfbfc]  relative transition-all duration-300 ">
+          {/* left arrow */}
+          <div
+            onClick={() => {
+              this.setState((prev) => {
+                if (prev.selectedImageIndex === 0) return;
+                return {
+                  selectedImageIndex: prev.selectedImageIndex - 1,
+                };
+              });
+            }}
+            className="absolute w-8 h-8 bg-[#000000BA] flex items-center justify-center top-1/2 -translate-y-1/2 left-4 cursor-pointer"
+          >
+            <img src={leftArrow} alt="left arrow" />
+          </div>
+
           <img
             src={imageLinks[this.state.selectedImageIndex]}
             alt="product image"
-            className="object-contain"
+            className="w-full h-full object-contain"
           />
+
+          {/* right arrow */}
+          <div
+            onClick={() => {
+              this.setState((prev) => {
+                if (prev.selectedImageIndex === imageLinks.length - 1) return;
+                return {
+                  selectedImageIndex: prev.selectedImageIndex + 1,
+                };
+              });
+            }}
+            className="absolute w-8 h-8 bg-[#000000BA] flex items-center justify-center top-1/2 -translate-y-1/2 right-4 cursor-pointer rotate-180"
+          >
+            <img src={leftArrow} alt="left arrow" />
+          </div>
         </div>
       </div>
     );
