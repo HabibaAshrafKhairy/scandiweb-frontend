@@ -26,7 +26,11 @@ class ProductImages extends React.Component<{}, State> {
           {imageLinks.map((link, index) => (
             <div
               key={index}
-              className="w-20 h-20 cursor-pointer"
+              className={`w-20 h-20 cursor-pointer transition-all duration-300 ${
+                this.state.selectedImageIndex === index
+                  ? "ring-2 ring-[#5ECE7B] scale-110"
+                  : "scale-100"
+              }`}
               onClick={() => {
                 this.setState({ selectedImageIndex: index });
               }}
