@@ -8,9 +8,9 @@ class ProductCard extends React.Component<RouterProps> {
     const pathname = this.props.location.pathname;
     return (
       <Link to={`${pathname}/${Math.random()}`}>
-        <div className="w-fit p-4 hover:shadow-card transition-shadow duration-300 hover:cursor-pointer">
+        <div className="p-4 hover:shadow-card transition-shadow duration-300 hover:cursor-pointer">
           <div className="pb-6">
-            <img src={productImage} alt="product image" />
+            <img className="w-full" src={productImage} alt="product image" />
           </div>
 
           <p className="font-light text-lg">Running Shorts</p>
