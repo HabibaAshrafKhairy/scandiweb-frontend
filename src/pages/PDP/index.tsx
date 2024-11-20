@@ -2,6 +2,7 @@ import React from "react";
 import withRouter, { RouterProps } from "../../utils/withRouter";
 import ProductImages from "./productImages";
 import ProductSize from "./productSize";
+import ProductColor from "./productColor";
 
 class ProductDetailsPage extends React.Component<RouterProps> {
   render(): React.ReactNode {
@@ -14,6 +15,7 @@ class ProductDetailsPage extends React.Component<RouterProps> {
           <p className="text-3xl font-semibold">Running Shorts</p>
 
           <ProductSize />
+          <ProductColor />
         </div>
       </div>
     );
