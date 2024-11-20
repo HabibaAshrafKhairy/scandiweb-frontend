@@ -21,6 +21,7 @@ class ProductSize extends React.Component<{}, State> {
             const isSelected = this.state.selectedSize === size;
             return (
               <button
+                key={size}
                 className={`border border-[#1D1F22] w-16 h-11 flex items-center justify-center ${
                   isSelected ? "text-white bg-[#1D1F22]" : "text-[#1D1F22]"
                 }`}

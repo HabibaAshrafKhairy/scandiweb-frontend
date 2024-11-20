@@ -21,6 +21,7 @@ class ProductColor extends React.Component<{}, State> {
             const isSelected = this.state.selectedColor === color;
             return (
               <button
+                key={color}
                 style={{ backgroundColor: color }}
                 className={`w-8 h-8 ${
                   isSelected
