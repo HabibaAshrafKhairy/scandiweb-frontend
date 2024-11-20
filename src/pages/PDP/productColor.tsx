@@ -6,8 +6,16 @@ interface State {
   selectedColor: string;
 }
 
-class ProductColor extends React.Component<{}, State> {
-  constructor(props: {}) {
+interface PropsType {
+  size?: "sm" | "lg";
+}
+
+class ProductColor extends React.Component<PropsType, State> {
+  static defaultProps: Partial<PropsType> = {
+    size: "lg",
+  };
+
+  constructor(props: PropsType) {
     super(props);
     this.state = { selectedColor: colors[0] };
   }
@@ -15,7 +23,13 @@ class ProductColor extends React.Component<{}, State> {
   render(): React.ReactNode {
     return (
       <div>
-        <p className="text-lg font-bold pb-2">COLOR:</p>
+        <p
+          className={`text-lg font-bold pb-2 ${
+            this.props.size === "sm" && "text-sm font-normal"
+          }`}
+        >
+          COLOR:
+        </p>
         <div className="flex gap-3">
           {colors.map((color) => {
             const isSelected = this.state.selectedColor === color;
@@ -27,7 +41,7 @@ class ProductColor extends React.Component<{}, State> {
                   isSelected
                     ? "ring-2 ring-[#5ECE7B] ring-offset-2 ring-offset-white"
                     : ""
-                }`}
+                } ${this.props.size === "sm" && "h-5 w-5"}`}
                 onClick={() => {
                   this.setState({ selectedColor: color });
                 }}
