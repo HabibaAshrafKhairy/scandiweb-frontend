@@ -8,8 +8,8 @@ class ProductsListPage extends React.Component<RouterProps> {
     const { params } = this.props;
 
     return (
-      <div className="py-20">
-        <h1 className="text-[42px] pb-24">
+      <div className="py-4 md:py-20">
+        <h1 className="text-base md:text-[42px] pb-4 md:pb-24">
           {capitalizeFirstLetter(params.category)}
         </h1>
 

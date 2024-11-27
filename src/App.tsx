@@ -8,7 +8,7 @@ import ProductDetailsPage from "./pages/PDP";
 class App extends React.Component {
   render(): React.ReactNode {
     return (
-      <div className="px-28">
+      <div className="px-4 md:px-28">
         <Header />
 
         <Routes>

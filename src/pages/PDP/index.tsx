@@ -9,7 +9,7 @@ class ProductDetailsPage extends React.Component<RouterProps> {
   render(): React.ReactNode {
     console.log(this.props.params);
     return (
-      <div className="py-20 grid grid-cols-[60%,30%] gap-24">
+      <div className="py-4 md:py-20 flex flex-col gap-8 lg:grid grid-cols-[60%,30%] md:gap-24">
         <ProductImages />
 
         <div className="flex flex-col gap-8  max-w-72">

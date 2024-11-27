@@ -4,7 +4,7 @@ import CartProduct from "./cartProduct";
 class CartOverlay extends React.Component {
   render(): React.ReactNode {
     return (
-      <div className="absolute top-full right-0 w-1/4 px-4 py-8 flex flex-col gap-8 z-30 bg-white">
+      <div className="absolute w-full md:w-1/2 lg:w-1/4 top-full right-0 px-4 py-8 flex flex-col gap-8 z-30 bg-white">
         <div className="flex flex-col gap-8">
           <p className="font-bold">
             My Bag, <span className="font-medium">3 items</span>
