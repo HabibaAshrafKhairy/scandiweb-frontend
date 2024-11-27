@@ -27,7 +27,10 @@ class ProductImages extends React.Component<{}, State> {
 
   render(): React.ReactNode {
     return (
-      <div className="grid grid-cols-[auto,1fr] gap-x-10">
+      <div
+        className="grid grid-cols-[auto,1fr] gap-x-10"
+        data-testid="product-gallery"
+      >
         <div className="flex flex-col gap-5  max-h-[50vh] overflow-y-auto">
           {imageLinks.map((link, index) => (
             <div

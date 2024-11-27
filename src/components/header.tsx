@@ -54,6 +54,7 @@ class Header extends React.Component<{}, State> {
             }))
           }
           className="relative"
+          data-testid="cart-btn"
         >
           <img src={cartIcon} alt="cart icon" className="h-6 lg:h-8" />
           {totalItems > 0 && (
@@ -67,7 +68,7 @@ class Header extends React.Component<{}, State> {
         {showCartOverlay && <CartOverlay />}
         {showCartOverlay && (
           <div
-            className="fixed inset-0 bg-black bg-opacity-50 z-20"
+            className="fixed inset-0 top-20 bg-black bg-opacity-50 z-20"
             onClick={() => this.setState({ showCartOverlay: false })}
           ></div>
         )}

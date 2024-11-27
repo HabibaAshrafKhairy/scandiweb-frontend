@@ -22,7 +22,7 @@ class ProductSize extends React.Component<PropsType, State> {
 
   render(): React.ReactNode {
     return (
-      <div>
+      <div data-testid="product-attribute-${attribute in kebab case}">
         <p
           className={`text-lg font-bold pb-2 ${
             this.props.size === "sm" && "text-sm font-normal"

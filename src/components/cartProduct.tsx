@@ -15,7 +15,10 @@ class CartProduct extends React.Component<{}, State> {
 
   render(): React.ReactNode {
     return (
-      <div className="grid grid-cols-[1fr,_auto,_1fr] gap-2">
+      <div
+        className="grid grid-cols-[1fr,_auto,_1fr] gap-2"
+        data-testid="cart-item-attribute-${attribute name in kebab case}"
+      >
         <div className="flex flex-col gap-2">
           <p className="text-lg font-light">Running Shorts</p>
           <p className="font-normal text-base">$50.00</p>
@@ -29,16 +32,20 @@ class CartProduct extends React.Component<{}, State> {
             onClick={() => {
               this.setState((prev) => ({ itemCount: prev.itemCount + 1 }));
             }}
+            data-testid="cart-item-amount-increase"
           >
             +
           </button>
-          <p className="text-center">{this.state.itemCount}</p>
+          <p className="text-center" data-testid="cart-item-amount">
+            {this.state.itemCount}
+          </p>
           <button
             className="w-6 h-6 items-center justify-center border border-[#1D1F22]"
             onClick={() => {
               if (this.state.itemCount === 1) return;
               this.setState((prev) => ({ itemCount: prev.itemCount - 1 }));
             }}
+            data-testid="cart-item-amount-decrease"
           >
             -
           </button>

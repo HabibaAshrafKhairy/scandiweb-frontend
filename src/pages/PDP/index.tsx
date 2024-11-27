@@ -19,11 +19,14 @@ class ProductDetailsPage extends React.Component<RouterProps> {
           <ProductColor />
           <ProductPrice />
 
-          <button className="p-4 text-base font-semibold text-white bg-[#5ECE7B]">
+          <button
+            className="p-4 text-base font-semibold text-white bg-[#5ECE7B]"
+            data-testid="add-to-cart"
+          >
             ADD TO CART
           </button>
 
-          <p>
+          <p data-testid="product-description">
             Find stunning women's cocktail dresses and party dresses. Stand out
             in lace and metallic cocktail dresses and party dresses from all
             your favorite brands.

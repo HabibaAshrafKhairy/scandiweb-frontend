@@ -20,7 +20,7 @@ class CartOverlay extends React.Component {
 
           <div className="flex justify-between font-medium">
             <p>Total</p>
-            <p>$200.00</p>
+            <p data-testid="cart-total">$200.00</p>
           </div>
 
           <button className="p-3 text-base font-semibold text-white bg-[#5ECE7B]">

@@ -19,6 +19,7 @@ class ProductCard extends React.Component<RouterProps, State> {
 
     const cardContent = (
       <div
+        data-testid="product-${product name in kebab case}"
         className={`p-4 ${
           !this.state.isOutOfStock &&
           "hover:shadow-card transition-shadow duration-300 hover:cursor-pointer"
