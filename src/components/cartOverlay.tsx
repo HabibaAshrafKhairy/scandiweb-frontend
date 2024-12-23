@@ -51,7 +51,7 @@ class CartOverlay extends React.Component<CartProps> {
 
           <div className="flex justify-between font-medium">
             <p>Total</p>
-            <p data-testid="cart-total">${cartInfo.totalPrice}</p>
+            <p data-testid="cart-total">${cartInfo.totalPrice.toFixed(2)}</p>
           </div>
 
           <button

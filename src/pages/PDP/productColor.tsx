@@ -40,10 +40,10 @@ class ProductColor extends React.Component<PropsType, State> {
               <button
                 key={color.id}
                 style={{ backgroundColor: color.value }}
-                className={`w-8 h-8 ${
+                className={`w-8 h-8  ${
                   isSelected
                     ? "ring-2 ring-[#5ECE7B] ring-offset-2 ring-offset-white"
-                    : ""
+                    : "border border-gray-300"
                 } ${this.props.size === "sm" && "h-5 w-5"}`}
                 onClick={() => {
                   this.setState({ selectedColor: color.value });
