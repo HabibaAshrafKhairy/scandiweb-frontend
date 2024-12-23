@@ -1,30 +1,64 @@
 import React from "react";
 import CartProduct from "./cartProduct";
+import { connect } from "react-redux";
+import { RootState } from "../store";
+import { CartItem } from "../types";
+import { removeFromCart } from "../reducers/cartSlice";
 
-class CartOverlay extends React.Component {
+interface CartProps {
+  cartItems: CartItem[];
+  removeFromCart: typeof removeFromCart;
+}
+
+class CartOverlay extends React.Component<CartProps> {
   render(): React.ReactNode {
+    console.log("findme", this.props.cartItems);
+
+    const { removeFromCart, cartItems } = this.props;
+
+    const cartInfo = cartItems.reduce(
+      (acc, item) => {
+        return {
+          totalCount: acc.totalCount + item.amount,
+          totalPrice: acc.totalPrice + item.amount * item.price,
+        };
+      },
+      { totalCount: 0, totalPrice: 0 }
+    );
+
     return (
       <div className="absolute w-full md:w-1/2 lg:w-1/4 top-full right-0 px-4 py-8 flex flex-col gap-8 z-30 bg-white">
         <div className="flex flex-col gap-8">
           <p className="font-bold">
-            My Bag, <span className="font-medium">3 items</span>
+            My Bag,{" "}
+            <span className="font-medium">
+              {cartInfo.totalCount === 1
+                ? `1 Item`
+                : `${cartInfo.totalCount} Items`}
+            </span>
           </p>
 
           <div className="flex flex-col gap-8 max-h-[400px] overflow-y-auto p-2">
-            <CartProduct />
-            <CartProduct />
-            <CartProduct />
-            <CartProduct />
-            <CartProduct />
+            {cartItems.length > 0 &&
+              cartItems.map((cartItem) => (
+                <CartProduct
+                  key={cartItem.id}
+                  removeFromCart={removeFromCart}
+                  cartItem={cartItem}
+                />
+              ))}
           </div>
 
           <div className="flex justify-between font-medium">
             <p>Total</p>
-            <p data-testid="cart-total">$200.00</p>
+            <p data-testid="cart-total">${cartInfo.totalPrice}</p>
           </div>
 
-          <button className="p-3 text-base font-semibold text-white bg-[#5ECE7B]">
-            ADD TO CART
+          <button
+            className="p-3 text-base font-semibold text-white bg-[#5ECE7B] disabled:bg-slate-400"
+            disabled={cartInfo.totalCount === 0}
+          >
+            PLACE ORDER
           </button>
         </div>
       </div>
@@ -32,4 +66,12 @@ class CartOverlay extends React.Component {
   }
 }
 
-export default CartOverlay;
+const mapStateToProps = (state: RootState) => ({
+  cartItems: state.cart.items,
+});
+
+const mapDispatchToProps = {
+  removeFromCart,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CartOverlay);

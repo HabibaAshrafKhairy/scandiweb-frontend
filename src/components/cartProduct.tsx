@@ -1,27 +1,26 @@
 import React from "react";
-import image from "../../src/assets/Image.png";
 import ProductTextAttribute from "../pages/PDP/productTextAttribute";
 import ProductColor from "../pages/PDP/productColor";
+import { CartItem } from "../types";
+import { removeFromCart } from "../reducers/cartSlice";
 
-interface State {
-  itemCount: number;
+interface CartProps {
+  cartItem: CartItem;
+  removeFromCart: typeof removeFromCart;
 }
 
-class CartProduct extends React.Component<{}, State> {
-  constructor(props: {}) {
-    super(props);
-    this.state = { itemCount: 1 };
-  }
-
+class CartProduct extends React.Component<CartProps> {
   render(): React.ReactNode {
+    const { removeFromCart, cartItem } = this.props;
+
     return (
       <div
         className="grid grid-cols-[1fr,_auto,_1fr] gap-2"
         data-testid="cart-item-attribute-${attribute name in kebab case}"
       >
         <div className="flex flex-col gap-2">
-          <p className="text-lg font-light">Running Shorts</p>
-          <p className="font-normal text-base">$50.00</p>
+          <p className="text-lg font-light">{cartItem.name}</p>
+          <p className="font-normal text-base">${cartItem.price.toFixed(2)}</p>
           <ProductTextAttribute size="sm" />
           <ProductColor size="sm" />
         </div>
@@ -30,20 +29,19 @@ class CartProduct extends React.Component<{}, State> {
           <button
             className="w-6 h-6 items-center justify-center border border-[#1D1F22]"
             onClick={() => {
-              this.setState((prev) => ({ itemCount: prev.itemCount + 1 }));
+              console.log("add");
             }}
             data-testid="cart-item-amount-increase"
           >
             +
           </button>
           <p className="text-center" data-testid="cart-item-amount">
-            {this.state.itemCount}
+            {cartItem.amount}
           </p>
           <button
             className="w-6 h-6 items-center justify-center border border-[#1D1F22]"
             onClick={() => {
-              if (this.state.itemCount === 1) return;
-              this.setState((prev) => ({ itemCount: prev.itemCount - 1 }));
+              removeFromCart(cartItem.id);
             }}
             data-testid="cart-item-amount-decrease"
           >
@@ -53,7 +51,7 @@ class CartProduct extends React.Component<{}, State> {
 
         <div className="w-full h-full bg-[#fcfbfc] flex justify-center object-contain">
           <img
-            src={image}
+            src={cartItem.gallery && cartItem.gallery[0]}
             alt="product image"
             className="w-full h-full object-contain"
           />

@@ -27,3 +27,8 @@ export interface AttributeItem {
   displayValue: string | null;
   swatch: string | null;
 }
+
+export interface CartItem extends Product {
+  selectedAttributesIds: number[];
+  amount: number;
+}

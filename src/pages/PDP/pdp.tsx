@@ -8,6 +8,8 @@ import { Product } from "../../types";
 import { DataProps, graphql } from "@apollo/client/react/hoc";
 import { GET_PRODUCT_BY_ID } from "../../graphql/queries";
 import { removeTags } from "../../utils/helpers";
+import { addToCart } from "../../reducers/cartSlice";
+import { connect } from "react-redux";
 
 interface GraphQLResponse {
   product: Product;
@@ -16,12 +18,16 @@ interface GraphQLResponse {
 // Props injected by the graphql HOC
 type GraphQLProps = DataProps<GraphQLResponse>;
 
-// Combined props for the Navigation component
-type CombinedProps = RouterProps & Partial<GraphQLProps>;
+interface CartProps {
+  addToCart: typeof addToCart;
+}
+
+// Combined props for the PDP component
+type CombinedProps = RouterProps & Partial<GraphQLProps> & Partial<CartProps>;
 
 class ProductDetailsPage extends React.Component<CombinedProps> {
   render(): React.ReactNode {
-    const { data } = this.props;
+    const { data, addToCart } = this.props;
 
     // Handle loading or error states from GraphQL
     if (!data) return;
@@ -31,8 +37,6 @@ class ProductDetailsPage extends React.Component<CombinedProps> {
     const product = data?.product;
 
     if (!product) return;
-
-    console.log(product);
 
     return (
       <div className="py-4 md:py-20 flex flex-col gap-8 lg:grid grid-cols-[60%,30%] md:gap-24">
@@ -60,6 +64,14 @@ class ProductDetailsPage extends React.Component<CombinedProps> {
           <button
             className="p-4 text-base font-semibold text-white bg-[#5ECE7B]"
             data-testid="add-to-cart"
+            onClick={() => {
+              if (!addToCart) return;
+              addToCart({
+                ...product,
+                selectedAttributesIds: [1],
+                amount: 1,
+              });
+            }}
           >
             ADD TO CART
           </button>
@@ -73,12 +85,21 @@ class ProductDetailsPage extends React.Component<CombinedProps> {
   }
 }
 
-export default withRouter(
-  graphql<CombinedProps, {}, {}, CombinedProps>(GET_PRODUCT_BY_ID, {
-    options: (props: CombinedProps) => ({
-      variables: {
-        id: props.params.productId ? props.params.productId : "",
-      },
-    }),
-  })(ProductDetailsPage)
+const mapDispatchToProps = {
+  addToCart,
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(
+  withRouter(
+    graphql<CombinedProps, {}, {}, CombinedProps>(GET_PRODUCT_BY_ID, {
+      options: (props: CombinedProps) => ({
+        variables: {
+          id: props.params.productId ? props.params.productId : "",
+        },
+      }),
+    })(ProductDetailsPage)
+  )
 );
