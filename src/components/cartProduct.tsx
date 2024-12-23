@@ -1,6 +1,6 @@
 import React from "react";
 import image from "../../src/assets/Image.png";
-import ProductSize from "../pages/PDP/productSize";
+import ProductTextAttribute from "../pages/PDP/productTextAttribute";
 import ProductColor from "../pages/PDP/productColor";
 
 interface State {
@@ -22,7 +22,7 @@ class CartProduct extends React.Component<{}, State> {
         <div className="flex flex-col gap-2">
           <p className="text-lg font-light">Running Shorts</p>
           <p className="font-normal text-base">$50.00</p>
-          <ProductSize size="sm" />
+          <ProductTextAttribute size="sm" />
           <ProductColor size="sm" />
         </div>
 

@@ -1,13 +1,12 @@
 import React from "react";
 
-const colors = ["#D3D2D5", "#2B2B2B", "#0F6450"];
-
 interface State {
   selectedColor: string;
 }
 
 interface PropsType {
   size?: "sm" | "lg";
+  colors: { id: number; value: string }[];
 }
 
 class ProductColor extends React.Component<PropsType, State> {
@@ -17,10 +16,14 @@ class ProductColor extends React.Component<PropsType, State> {
 
   constructor(props: PropsType) {
     super(props);
-    this.state = { selectedColor: colors[0] };
+    this.state = { selectedColor: props?.colors?.[0].value };
   }
 
   render(): React.ReactNode {
+    const { colors } = this.props;
+
+    if (!colors || colors?.length === 0) return;
+
     return (
       <div data-testid="product-attribute-${attribute in kebab case}">
         <p
@@ -32,18 +35,18 @@ class ProductColor extends React.Component<PropsType, State> {
         </p>
         <div className="flex gap-3">
           {colors.map((color) => {
-            const isSelected = this.state.selectedColor === color;
+            const isSelected = this.state.selectedColor === color.value;
             return (
               <button
-                key={color}
-                style={{ backgroundColor: color }}
+                key={color.id}
+                style={{ backgroundColor: color.value }}
                 className={`w-8 h-8 ${
                   isSelected
                     ? "ring-2 ring-[#5ECE7B] ring-offset-2 ring-offset-white"
                     : ""
                 } ${this.props.size === "sm" && "h-5 w-5"}`}
                 onClick={() => {
-                  this.setState({ selectedColor: color });
+                  this.setState({ selectedColor: color.value });
                 }}
               ></button>
             );

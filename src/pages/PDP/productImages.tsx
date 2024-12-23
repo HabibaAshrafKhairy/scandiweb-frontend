@@ -1,31 +1,25 @@
 import React from "react";
 import leftArrow from "../../assets/arrow-left.svg";
 
-// Array of working product image links
-const imageLinks = [
-  "https://images.unsplash.com/photo-1560807707-8cc77767d783?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400", // T-shirt
-  "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400", // Jacket
-  "https://images.unsplash.com/photo-1560807707-8cc77767d783?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400", // T-shirt
-  "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400", // Jacket
-  "https://images.unsplash.com/photo-1519638399535-1b036603ac77?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400", // Sneakers
-  "https://images.unsplash.com/photo-1519638399535-1b036603ac77?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400", // Sneakers
-  "https://images.unsplash.com/photo-1519638399535-1b036603ac77?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400", // Sneakers
-  "https://images.unsplash.com/photo-1519638399535-1b036603ac77?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400", // Sneakers
-  "https://images.unsplash.com/photo-1519638399535-1b036603ac77?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400", // Sneakers
-  "https://images.unsplash.com/photo-1519638399535-1b036603ac77?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400", // Sneakers
-];
+interface PropsType {
+  imageLinks: string[];
+}
 
 interface State {
   selectedImageIndex: number;
 }
 
-class ProductImages extends React.Component<{}, State> {
-  constructor(props: {}) {
+class ProductImages extends React.Component<PropsType, State> {
+  constructor(props: PropsType) {
     super(props);
     this.state = { selectedImageIndex: 0 };
   }
 
   render(): React.ReactNode {
+    const { imageLinks } = this.props;
+
+    if (!imageLinks || imageLinks.length === 0) return;
+
     return (
       <div
         className="grid grid-cols-[auto,1fr] gap-x-10"

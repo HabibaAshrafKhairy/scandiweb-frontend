@@ -4,6 +4,7 @@ import logo from "../../src/assets/logo.svg";
 import cartIcon from "../../src/assets/cart-icon.svg";
 import CartOverlay from "./cartOverlay";
 import navigationIcon from "../assets/icons8-navigation-menu.svg";
+import { Link } from "react-router-dom";
 
 interface State {
   showCartOverlay: boolean;
@@ -42,9 +43,15 @@ class Header extends React.Component<{}, State> {
         </button>
 
         {/* Logo */}
-        <div className="absolute  left-1/2">
-          <img src={logo} alt="logo" className="h-8 lg:h-10 mx-auto lg:mx-0" />
-        </div>
+        <Link to="/products/">
+          <div className="absolute  left-1/2">
+            <img
+              src={logo}
+              alt="logo"
+              className="h-8 lg:h-10 mx-auto lg:mx-0"
+            />
+          </div>
+        </Link>
 
         {/* Cart Icon */}
         <button

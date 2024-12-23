@@ -1,27 +1,47 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import withRouter, { RouterProps } from "../utils/withRouter";
+import { DataProps, graphql } from "@apollo/client/react/hoc";
+import { GET_CATEGORIES } from "../graphql/queries";
+import { Category } from "../types";
 
-const categories = ["women", "men", "kids"];
+interface GraphQLResponse {
+  categories: Category[];
+}
 
-interface PropsType {
+// Props injected by the graphql HOC
+type GraphQLProps = DataProps<GraphQLResponse>;
+
+// Custom props for the component
+interface CustomProps {
   closeMobileNav?: () => void;
 }
 
-class Navigation extends React.Component<RouterProps & PropsType> {
+// Combined props for the Navigation component
+type CombinedProps = RouterProps & CustomProps & Partial<GraphQLProps>;
+
+class Navigation extends React.Component<CombinedProps> {
   render(): React.ReactNode {
-    const pathname = this.props.location.pathname;
+    const { location, closeMobileNav, data } = this.props;
+
+    // Handle loading or error states from GraphQL
+    if (!data) return;
+    if (data?.loading) return <p>Loading...</p>;
+    if (data?.error) return <p>Error: {data.error.message}</p>;
+
+    const categories = data?.categories || []; // Default to empty array if no categories
+    const pathname = location.pathname;
 
     return (
       <nav>
         <ul className="flex flex-col gap-4 lg:flex-row">
           {categories.map((category) => {
-            const isActive = pathname.includes(`products/${category}`);
+            const isActive = pathname.includes(`products/${category.name}`);
 
             return (
-              <li key={category}>
+              <li key={category.id}>
                 <Link
-                  to={`products/${category}`}
+                  to={`products/${category.name}`}
                   className={`text-base lg:pb-7 lg:px-4 lg:border-b-2 ${
                     isActive
                       ? "text-[#5ECE7B] border-[#5ECE7B]"
@@ -31,10 +51,10 @@ class Navigation extends React.Component<RouterProps & PropsType> {
                     isActive ? "active-category-link" : "category-link"
                   }
                   onClick={() => {
-                    this.props.closeMobileNav && this.props.closeMobileNav();
+                    closeMobileNav && closeMobileNav();
                   }}
                 >
-                  {category.toUpperCase()}
+                  {category.name.toUpperCase()}
                 </Link>
               </li>
             );
@@ -45,4 +65,6 @@ class Navigation extends React.Component<RouterProps & PropsType> {
   }
 }
 
-export default withRouter(Navigation);
+export default withRouter(
+  graphql<CombinedProps, {}, {}, CombinedProps>(GET_CATEGORIES)(Navigation)
+);
