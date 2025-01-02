@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { CartItem } from "../types";
+import { CartItem, SelectedAttribute } from "../types";
 
 interface CartState {
   items: CartItem[];
@@ -14,25 +14,47 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart(state, action: PayloadAction<CartItem>) {
-      const addedItem = state.items.find(
-        (item) => item.id === action.payload.id
+      // Check if an item with the same id and selectedAttributes already exists in the cart
+      const existingItemIndex = state.items.findIndex(
+        (item) =>
+          item.id === action.payload.id &&
+          JSON.stringify(item.selectedAttributes) ===
+            JSON.stringify(action.payload.selectedAttributes)
       );
 
-      if (!addedItem) {
-        state.items.push(action.payload);
+      if (existingItemIndex !== -1) {
+        // If found, increase the amount of the existing item
+        state.items[existingItemIndex].amount += 1;
       } else {
-        addedItem.amount++;
+        // Otherwise, treat it as a new item and add it to the cart
+        state.items.push({ ...action.payload, amount: 1 });
       }
     },
-    removeFromCart(state, action: PayloadAction<string>) {
-      const removedItem = state.items.find(
-        (item) => item.id === action.payload
+    removeFromCart(
+      state,
+      action: PayloadAction<{
+        id: string;
+        selectedAttributes: SelectedAttribute[];
+      }>
+    ) {
+      // Find the index of the item to be removed
+      const itemIndex = state.items.findIndex(
+        (item) =>
+          item.id === action.payload.id &&
+          JSON.stringify(item.selectedAttributes) ===
+            JSON.stringify(action.payload.selectedAttributes)
       );
 
-      if (removedItem?.amount === 1) {
-        state.items = state.items.filter((item) => item.id !== action.payload);
-      } else {
-        removedItem?.amount && removedItem.amount--;
+      if (itemIndex !== -1) {
+        const item = state.items[itemIndex];
+
+        if (item.amount === 1) {
+          // Remove the item from the cart
+          state.items.splice(itemIndex, 1);
+        } else {
+          // Decrease the amount
+          item.amount -= 1;
+        }
       }
     },
   },

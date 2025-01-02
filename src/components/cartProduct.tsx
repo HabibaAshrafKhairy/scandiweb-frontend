@@ -71,7 +71,10 @@ class CartProduct extends React.Component<CartProps> {
           <button
             className="w-6 h-6 items-center justify-center border border-[#1D1F22]"
             onClick={() => {
-              removeFromCart(cartItem.id);
+              removeFromCart({
+                id: cartItem.id,
+                selectedAttributes: cartItem.selectedAttributes,
+              });
             }}
             data-testid="cart-item-amount-decrease"
           >

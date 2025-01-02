@@ -42,7 +42,7 @@ class CartOverlay extends React.Component<CartProps> {
             {cartItems.length > 0 &&
               cartItems.map((cartItem) => (
                 <CartProduct
-                  key={cartItem.id}
+                  key={Math.random()}
                   removeFromCart={removeFromCart}
                   cartItem={cartItem}
                 />
