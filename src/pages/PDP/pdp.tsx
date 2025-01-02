@@ -4,7 +4,7 @@ import ProductImages from "./productImages";
 import ProductTextAttribute from "./productTextAttribute";
 import ProductColor from "./productColor";
 import ProductPrice from "./productPrice";
-import { Product } from "../../types";
+import { Product, SelectedAttribute } from "../../types";
 import { DataProps, graphql } from "@apollo/client/react/hoc";
 import { GET_PRODUCT_BY_ID } from "../../graphql/queries";
 import { removeTags } from "../../utils/helpers";
@@ -25,11 +25,6 @@ interface CartProps {
 // Combined props for the PDP component
 type CombinedProps = RouterProps & Partial<GraphQLProps> & Partial<CartProps>;
 
-interface SelectedAttribute {
-  attributeSetName: string;
-  selectedItemId: number;
-  selectedItemName: string;
-}
 interface StateType {
   selectedAttributes: SelectedAttribute[] | undefined;
 }
@@ -109,7 +104,11 @@ class ProductDetailsPage extends React.Component<CombinedProps, StateType> {
           {product?.attributes?.map((attribute) => {
             if (attribute?.type === "swatch")
               return (
-                <ProductColor key={attribute?.id} colors={attribute?.items} />
+                <ProductColor
+                  key={attribute?.id}
+                  colors={attribute?.items}
+                  selectAttributeHandler={this.selectAttributeHandler}
+                />
               );
             else
               return (
@@ -130,10 +129,7 @@ class ProductDetailsPage extends React.Component<CombinedProps, StateType> {
               if (!addToCart) return;
               addToCart({
                 ...product,
-                selectedAttributesIds:
-                  this.state.selectedAttributes?.map(
-                    (attr) => attr.selectedItemId
-                  ) || [],
+                selectedAttributes: this.state.selectedAttributes || [],
                 amount: 1,
               });
             }}

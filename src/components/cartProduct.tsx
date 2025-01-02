@@ -21,8 +21,38 @@ class CartProduct extends React.Component<CartProps> {
         <div className="flex flex-col gap-2">
           <p className="text-lg font-light">{cartItem.name}</p>
           <p className="font-normal text-base">${cartItem.price.toFixed(2)}</p>
-          <ProductTextAttribute size="sm" />
-          <ProductColor size="sm" />
+          {cartItem?.attributes?.map((attribute) => {
+            if (attribute?.type === "swatch")
+              return (
+                <ProductColor
+                  key={attribute?.id}
+                  colors={attribute?.items}
+                  size="sm"
+                  isCartItem={true}
+                  cartItemSelectedColor={
+                    cartItem.selectedAttributes.find(
+                      (selectedAttr) =>
+                        selectedAttr.attributeSetName === "Color"
+                    )?.selectedItemName
+                  }
+                />
+              );
+            else
+              return (
+                <ProductTextAttribute
+                  key={attribute?.id}
+                  attribute={attribute}
+                  size="sm"
+                  isCartItem={true}
+                  cartItemSelectedAttributeId={
+                    cartItem.selectedAttributes.find(
+                      (selectedAttr) =>
+                        selectedAttr.attributeSetName === attribute.name
+                    )?.selectedItemId
+                  }
+                />
+              );
+          })}
         </div>
 
         <div className="flex flex-col justify-between text-base font-normal">

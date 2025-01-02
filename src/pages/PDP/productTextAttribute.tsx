@@ -2,11 +2,13 @@ import React from "react";
 import { Attribute } from "../../types";
 
 interface State {
-  selectedTextAttributeValue: string;
+  selectedTextAttributeId: number;
 }
 
 interface PropsType {
   size?: "sm" | "lg";
+  isCartItem?: boolean;
+  cartItemSelectedAttributeId?: number;
   attribute: Attribute;
   selectAttributeHandler?: (attr: string, id: number, name: string) => void;
 }
@@ -19,12 +21,14 @@ class ProductTextAttribute extends React.Component<PropsType, State> {
   constructor(props: PropsType) {
     super(props);
     this.state = {
-      selectedTextAttributeValue: props?.attribute?.items[0].value,
+      selectedTextAttributeId: props?.isCartItem
+        ? (props?.cartItemSelectedAttributeId as number)
+        : props?.attribute?.items[0].id,
     };
   }
 
   render(): React.ReactNode {
-    const { attribute, selectAttributeHandler } = this.props;
+    const { attribute, selectAttributeHandler, isCartItem } = this.props;
 
     if (!attribute) return;
 
@@ -32,7 +36,7 @@ class ProductTextAttribute extends React.Component<PropsType, State> {
       <div data-testid="product-attribute-${attribute in kebab case}">
         <p
           className={`text-lg font-bold pb-2 ${
-            this.props.size === "sm" && "text-sm font-normal"
+            this.props.size === "sm" && "text-xs font-normal"
           }`}
         >
           {attribute?.name.toUpperCase()}:
@@ -40,16 +44,17 @@ class ProductTextAttribute extends React.Component<PropsType, State> {
         <div className="flex gap-3">
           {attribute?.items?.map((attributeItem) => {
             const isSelected =
-              this.state.selectedTextAttributeValue === attributeItem.value;
+              this.state.selectedTextAttributeId === attributeItem.id;
             return (
               <button
                 key={attributeItem.id}
-                className={`border border-[#1D1F22] w-16 h-11 flex items-center justify-center ${
+                disabled={isCartItem}
+                className={`border border-[#1D1F22] w-16 h-11 flex items-center justify-center p-2 ${
                   isSelected ? "text-white bg-[#1D1F22]" : "text-[#1D1F22]"
-                } ${this.props.size === "sm" && "h-6 w-6 text-sm"}`}
+                } ${this.props.size === "sm" && "w-10 h-8 text-xs"}`}
                 onClick={() => {
                   this.setState({
-                    selectedTextAttributeValue: attributeItem.value,
+                    selectedTextAttributeId: attributeItem.id,
                   });
                   selectAttributeHandler &&
                     selectAttributeHandler(

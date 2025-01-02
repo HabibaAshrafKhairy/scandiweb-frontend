@@ -28,7 +28,13 @@ export interface AttributeItem {
   swatch: string | null;
 }
 
+export interface SelectedAttribute {
+  attributeSetName: string;
+  selectedItemId: number;
+  selectedItemName: string;
+}
+
 export interface CartItem extends Product {
-  selectedAttributesIds: number[];
+  selectedAttributes: SelectedAttribute[];
   amount: number;
 }
