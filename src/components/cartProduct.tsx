@@ -2,16 +2,17 @@ import React from "react";
 import ProductTextAttribute from "../pages/PDP/productTextAttribute";
 import ProductColor from "../pages/PDP/productColor";
 import { CartItem } from "../types";
-import { removeFromCart } from "../reducers/cartSlice";
+import { removeFromCart, addToCart } from "../reducers/cartSlice";
 
 interface CartProps {
   cartItem: CartItem;
   removeFromCart: typeof removeFromCart;
+  addToCart: typeof addToCart;
 }
 
 class CartProduct extends React.Component<CartProps> {
   render(): React.ReactNode {
-    const { removeFromCart, cartItem } = this.props;
+    const { removeFromCart, addToCart, cartItem } = this.props;
 
     return (
       <div
@@ -59,7 +60,7 @@ class CartProduct extends React.Component<CartProps> {
           <button
             className="w-6 h-6 items-center justify-center border border-[#1D1F22]"
             onClick={() => {
-              console.log("add");
+              addToCart(cartItem);
             }}
             data-testid="cart-item-amount-increase"
           >

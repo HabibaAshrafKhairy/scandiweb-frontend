@@ -3,18 +3,19 @@ import CartProduct from "./cartProduct";
 import { connect } from "react-redux";
 import { RootState } from "../store";
 import { CartItem } from "../types";
-import { removeFromCart } from "../reducers/cartSlice";
+import { addToCart, removeFromCart } from "../reducers/cartSlice";
 
 interface CartProps {
   cartItems: CartItem[];
   removeFromCart: typeof removeFromCart;
+  addToCart: typeof addToCart;
 }
 
 class CartOverlay extends React.Component<CartProps> {
   render(): React.ReactNode {
     console.log("cart items", this.props.cartItems);
 
-    const { removeFromCart, cartItems } = this.props;
+    const { removeFromCart, addToCart, cartItems } = this.props;
 
     const cartInfo = cartItems.reduce(
       (acc, item) => {
@@ -44,6 +45,7 @@ class CartOverlay extends React.Component<CartProps> {
                 <CartProduct
                   key={Math.random()}
                   removeFromCart={removeFromCart}
+                  addToCart={addToCart}
                   cartItem={cartItem}
                 />
               ))}
@@ -72,6 +74,7 @@ const mapStateToProps = (state: RootState) => ({
 
 const mapDispatchToProps = {
   removeFromCart,
+  addToCart,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CartOverlay);
