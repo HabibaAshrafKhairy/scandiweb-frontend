@@ -12,7 +12,7 @@ interface CartProps {
 
 class CartOverlay extends React.Component<CartProps> {
   render(): React.ReactNode {
-    console.log("findme", this.props.cartItems);
+    console.log("cart items", this.props.cartItems);
 
     const { removeFromCart, cartItems } = this.props;
 

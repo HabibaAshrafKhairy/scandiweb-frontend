@@ -25,7 +25,66 @@ interface CartProps {
 // Combined props for the PDP component
 type CombinedProps = RouterProps & Partial<GraphQLProps> & Partial<CartProps>;
 
-class ProductDetailsPage extends React.Component<CombinedProps> {
+interface SelectedAttribute {
+  attributeSetName: string;
+  selectedItemId: number;
+  selectedItemName: string;
+}
+interface StateType {
+  selectedAttributes: SelectedAttribute[] | undefined;
+}
+
+class ProductDetailsPage extends React.Component<CombinedProps, StateType> {
+  constructor(props: CombinedProps) {
+    super(props);
+
+    this.selectAttributeHandler = this.selectAttributeHandler.bind(this);
+
+    this.state = {
+      selectedAttributes: [],
+    };
+  }
+
+  componentDidMount() {
+    if (this.props.data?.product?.attributes) {
+      const initialState = this.props.data.product.attributes.map((attr) => ({
+        attributeSetName: attr.name,
+        selectedItemId: attr.items[0]?.id, // Use the first item's value as the default
+        selectedItemName: attr.items[0]?.value,
+      }));
+
+      this.setState({ selectedAttributes: initialState });
+    }
+  }
+
+  componentDidUpdate(prevProps: CombinedProps) {
+    // Reinitialize if the product changes
+    if (prevProps.data?.product?.id !== this.props.data?.product?.id) {
+      const initialState = this.props.data?.product?.attributes?.map(
+        (attr) => ({
+          attributeSetName: attr.name,
+          selectedItemId: attr.items[0]?.id,
+          selectedItemName: attr.items[0]?.value,
+        })
+      );
+      this.setState({ selectedAttributes: initialState });
+    }
+  }
+
+  selectAttributeHandler(
+    attrSetName: string,
+    selectedItemId: number,
+    selectedItemName: string
+  ) {
+    this.setState((prevState) => ({
+      selectedAttributes: prevState.selectedAttributes?.map((attr) =>
+        attr.attributeSetName === attrSetName
+          ? { ...attr, selectedItemId, selectedItemName }
+          : attr
+      ),
+    }));
+  }
+
   render(): React.ReactNode {
     const { data, addToCart } = this.props;
 
@@ -37,6 +96,8 @@ class ProductDetailsPage extends React.Component<CombinedProps> {
     const product = data?.product;
 
     if (!product) return;
+
+    console.log("selected attributes", this.state.selectedAttributes);
 
     return (
       <div className="py-4 md:py-20 flex flex-col gap-8 lg:grid grid-cols-[60%,30%] md:gap-24">
@@ -55,6 +116,7 @@ class ProductDetailsPage extends React.Component<CombinedProps> {
                 <ProductTextAttribute
                   key={attribute?.id}
                   attribute={attribute}
+                  selectAttributeHandler={this.selectAttributeHandler}
                 />
               );
           })}
@@ -68,7 +130,10 @@ class ProductDetailsPage extends React.Component<CombinedProps> {
               if (!addToCart) return;
               addToCart({
                 ...product,
-                selectedAttributesIds: [1],
+                selectedAttributesIds:
+                  this.state.selectedAttributes?.map(
+                    (attr) => attr.selectedItemId
+                  ) || [],
                 amount: 1,
               });
             }}

@@ -2,12 +2,13 @@ import React from "react";
 import { Attribute } from "../../types";
 
 interface State {
-  selectedTextAttribute: string;
+  selectedTextAttributeValue: string;
 }
 
 interface PropsType {
   size?: "sm" | "lg";
   attribute: Attribute;
+  selectAttributeHandler?: (attr: string, id: number, name: string) => void;
 }
 
 class ProductTextAttribute extends React.Component<PropsType, State> {
@@ -17,11 +18,13 @@ class ProductTextAttribute extends React.Component<PropsType, State> {
 
   constructor(props: PropsType) {
     super(props);
-    this.state = { selectedTextAttribute: props?.attribute?.items[0].value };
+    this.state = {
+      selectedTextAttributeValue: props?.attribute?.items[0].value,
+    };
   }
 
   render(): React.ReactNode {
-    const { attribute } = this.props;
+    const { attribute, selectAttributeHandler } = this.props;
 
     if (!attribute) return;
 
@@ -37,7 +40,7 @@ class ProductTextAttribute extends React.Component<PropsType, State> {
         <div className="flex gap-3">
           {attribute?.items?.map((attributeItem) => {
             const isSelected =
-              this.state.selectedTextAttribute === attributeItem.value;
+              this.state.selectedTextAttributeValue === attributeItem.value;
             return (
               <button
                 key={attributeItem.id}
@@ -45,7 +48,15 @@ class ProductTextAttribute extends React.Component<PropsType, State> {
                   isSelected ? "text-white bg-[#1D1F22]" : "text-[#1D1F22]"
                 } ${this.props.size === "sm" && "h-6 w-6 text-sm"}`}
                 onClick={() => {
-                  this.setState({ selectedTextAttribute: attributeItem.value });
+                  this.setState({
+                    selectedTextAttributeValue: attributeItem.value,
+                  });
+                  selectAttributeHandler &&
+                    selectAttributeHandler(
+                      attribute?.name,
+                      attributeItem.id,
+                      attributeItem.value
+                    );
                 }}
               >
                 {attributeItem.value}
