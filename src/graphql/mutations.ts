@@ -5,6 +5,10 @@ export const PLACE_ORDER = gql`
     placeOrder(items: $items) {
       id
       total
+      items {
+        quantity
+        price
+      }
     }
   }
 `;
