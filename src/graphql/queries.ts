@@ -18,6 +18,17 @@ export const GET_PRODUCTS = gql`
       price
       in_stock
       gallery
+      attributes {
+        id
+        name
+        type
+        items {
+          id
+          value
+          displayValue
+          swatch
+        }
+      }
     }
   }
 `;
