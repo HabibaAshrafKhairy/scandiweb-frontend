@@ -2,16 +2,48 @@ import React from "react";
 import CartProduct from "./cartProduct";
 import { connect } from "react-redux";
 import { RootState } from "../store";
-import { CartItem } from "../types";
+import { CartItem, OrderItem } from "../types";
 import { addToCart, removeFromCart } from "../reducers/cartSlice";
+import { graphql } from "@apollo/client/react/hoc";
+import { PLACE_ORDER } from "../graphql/mutations";
+import { MutationFunction } from "@apollo/client";
 
-interface CartProps {
+interface ReduxCartProps {
   cartItems: CartItem[];
   removeFromCart: typeof removeFromCart;
   addToCart: typeof addToCart;
 }
 
-class CartOverlay extends React.Component<CartProps> {
+interface GraphqlProps {
+  placeOrder: MutationFunction<any, { items: Array<OrderItem> }>;
+}
+
+type CombinedProps = ReduxCartProps & GraphqlProps;
+
+class CartOverlay extends React.Component<CombinedProps> {
+  handlePlaceOrder = () => {
+    const { cartItems, placeOrder } = this.props;
+
+    const items = cartItems.map((item) => ({
+      product_id: item.id,
+      quantity: item.amount,
+      price: item.price,
+      selected_attribute_item_ids: item.selectedAttributes.map(
+        (attr) => attr.selectedItemId
+      ),
+    }));
+
+    placeOrder({ variables: { items } })
+      .then((response: any) => {
+        console.log("Order placed successfully", response.data);
+        alert("Order placed successfully!");
+      })
+      .catch((error: any) => {
+        console.error("Error placing order", error);
+        alert("Failed to place the order. Please try again.");
+      });
+  };
+
   render(): React.ReactNode {
     console.log("cart items", this.props.cartItems);
 
@@ -59,6 +91,7 @@ class CartOverlay extends React.Component<CartProps> {
           <button
             className="p-3 text-base font-semibold text-white bg-[#5ECE7B] disabled:bg-slate-400"
             disabled={cartInfo.totalCount === 0}
+            onClick={this.handlePlaceOrder}
           >
             PLACE ORDER
           </button>
@@ -77,4 +110,11 @@ const mapDispatchToProps = {
   addToCart,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CartOverlay);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(
+  graphql<{}, CombinedProps, {}, CombinedProps>(PLACE_ORDER, {
+    name: "placeOrder",
+  })(CartOverlay)
+);

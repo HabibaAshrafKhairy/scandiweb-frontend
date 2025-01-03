@@ -38,3 +38,10 @@ export interface CartItem extends Product {
   selectedAttributes: SelectedAttribute[];
   amount: number;
 }
+
+export interface OrderItem {
+  product_id: string;
+  quantity: number;
+  price: number;
+  selected_attribute_item_ids: number[];
+}
