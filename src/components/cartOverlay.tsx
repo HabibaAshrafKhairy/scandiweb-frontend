@@ -71,7 +71,7 @@ class CartOverlay extends React.Component<CombinedProps> {
             </span>
           </p>
 
-          <div className="flex flex-col gap-8 max-h-[400px] overflow-y-auto p-2">
+          <div className="flex flex-col gap-10 max-h-[400px] overflow-y-auto p-2">
             {cartItems.length > 0 &&
               cartItems.map((cartItem) => (
                 <CartProduct

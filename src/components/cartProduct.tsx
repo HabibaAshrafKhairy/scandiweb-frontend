@@ -21,7 +21,9 @@ class CartProduct extends React.Component<CartProps> {
       >
         <div className="flex flex-col gap-2">
           <p className="text-lg font-light">{cartItem.name}</p>
-          <p className="font-normal text-base">${cartItem.price.toFixed(2)}</p>
+          <p className="font-semibold text-base">
+            ${cartItem.price.toFixed(2)}
+          </p>
           {cartItem?.attributes?.map((attribute) => {
             if (attribute?.type === "swatch")
               return (

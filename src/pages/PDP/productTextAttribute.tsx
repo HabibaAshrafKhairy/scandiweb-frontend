@@ -36,7 +36,7 @@ class ProductTextAttribute extends React.Component<PropsType, State> {
       <div data-testid="product-attribute-${attribute in kebab case}">
         <p
           className={`text-lg font-bold pb-2 ${
-            this.props.size === "sm" && "text-xs font-normal"
+            this.props.size === "sm" && "text-sm font-normal pb-1"
           }`}
         >
           {attribute?.name.toUpperCase()}:
