@@ -3,10 +3,12 @@ import { CartItem, SelectedAttribute } from "../types";
 
 interface CartState {
   items: CartItem[];
+  isCartOverlayOpen: boolean;
 }
 
 const initialState: CartState = {
   items: JSON.parse(localStorage.getItem("cartItems") || "[]"), // Load from localStorage if available
+  isCartOverlayOpen: false, // Initial state for the cart overlay
 };
 
 const cartSlice = createSlice({
@@ -63,9 +65,21 @@ const cartSlice = createSlice({
       // Save cart data to localStorage
       localStorage.setItem("cartItems", JSON.stringify(state.items));
     },
+    toggleCartOverlay(state) {
+      // Toggle the cart overlay's visibility
+      state.isCartOverlayOpen = !state.isCartOverlayOpen;
+    },
+    emptyCart(state) {
+      // Clear the cart items
+      state.items = [];
+
+      // Save cart data to localStorage
+      localStorage.setItem("cartItems", JSON.stringify(state.items));
+    },
   },
 });
 
-export const { addToCart, removeFromCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, toggleCartOverlay, emptyCart } =
+  cartSlice.actions;
 
 export default cartSlice.reducer;
