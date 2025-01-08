@@ -77,9 +77,7 @@ class ProductCard extends React.Component<CombinedProps> {
       </div>
     );
 
-    return !product.in_stock ? (
-      <div className="max-w-[360px]">{cardContent}</div>
-    ) : (
+    return (
       <Link className="max-w-[360px]" to={`${pathname}/${product.id}`}>
         {cardContent}
       </Link>
