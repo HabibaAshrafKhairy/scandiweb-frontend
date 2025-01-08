@@ -6,7 +6,7 @@ interface CartState {
 }
 
 const initialState: CartState = {
-  items: [],
+  items: JSON.parse(localStorage.getItem("cartItems") || "[]"), // Load from localStorage if available
 };
 
 const cartSlice = createSlice({
@@ -29,6 +29,9 @@ const cartSlice = createSlice({
         // Otherwise, treat it as a new item and add it to the cart
         state.items.push({ ...action.payload, amount: 1 });
       }
+
+      // Save cart data to localStorage
+      localStorage.setItem("cartItems", JSON.stringify(state.items));
     },
     removeFromCart(
       state,
@@ -56,6 +59,9 @@ const cartSlice = createSlice({
           item.amount -= 1;
         }
       }
+
+      // Save cart data to localStorage
+      localStorage.setItem("cartItems", JSON.stringify(state.items));
     },
   },
 });
