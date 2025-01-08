@@ -45,3 +45,14 @@ export interface OrderItem {
   price: number;
   selected_attribute_item_ids: number[];
 }
+
+export interface PlaceOrderResponse {
+  id: number;
+  total: number;
+  items: {
+    product_id: string;
+    quantity: number;
+    price: number;
+    selected_attributes: { name: string; value: string }[];
+  }[];
+}

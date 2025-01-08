@@ -2,11 +2,12 @@ import React from "react";
 import CartProduct from "./cartProduct";
 import { connect } from "react-redux";
 import { RootState } from "../store";
-import { CartItem, OrderItem } from "../types";
+import { CartItem, OrderItem, PlaceOrderResponse } from "../types";
 import { addToCart, removeFromCart } from "../reducers/cartSlice";
 import { graphql } from "@apollo/client/react/hoc";
 import { PLACE_ORDER } from "../graphql/mutations";
 import { MutationFunction } from "@apollo/client";
+import toast from "react-hot-toast";
 
 interface ReduxCartProps {
   cartItems: CartItem[];
@@ -15,7 +16,10 @@ interface ReduxCartProps {
 }
 
 interface GraphqlProps {
-  placeOrder: MutationFunction<any, { items: Array<OrderItem> }>;
+  placeOrder: MutationFunction<
+    { placeOrder: PlaceOrderResponse },
+    { items: OrderItem[] }
+  >;
 }
 
 type CombinedProps = ReduxCartProps & GraphqlProps;
@@ -33,14 +37,19 @@ class CartOverlay extends React.Component<CombinedProps> {
       ),
     }));
 
+    const toastId = toast.loading("Placing order...");
+
     placeOrder({ variables: { items } })
-      .then((response: any) => {
+      .then((response) => {
         console.log("Order placed successfully", response.data);
-        alert("Order placed successfully!");
+        showOrderToast(response.data?.placeOrder);
       })
       .catch((error: any) => {
         console.error("Error placing order", error);
-        alert("Failed to place the order. Please try again.");
+        toast.error("Failed to place the order. Please try again.");
+      })
+      .finally(() => {
+        toast.dismiss(toastId);
       });
   };
 
@@ -118,3 +127,56 @@ export default connect(
     name: "placeOrder",
   })(CartOverlay)
 );
+
+function showOrderToast(response?: PlaceOrderResponse) {
+  if (!response) return;
+  toast.custom(
+    (t) => (
+      <div
+        className={`max-w-md w-full p-4 bg-white rounded-lg shadow-lg border border-gray-200 ${
+          t.visible ? "animate-enter" : "animate-leave"
+        }`}
+      >
+        <div className="flex flex-col gap-4">
+          <h2 className="text-lg font-bold text-green-600">
+            🎉 Order #{response.id} Placed Successfully!
+          </h2>
+          <p className="text-gray-700">
+            Your order total is{" "}
+            <span className="font-semibold">${response.total.toFixed(2)}</span>.
+          </p>
+          <div className="flex flex-col gap-2">
+            {response.items.map((item) => (
+              <div
+                key={item.product_id}
+                className="border-b border-gray-300 pb-2 mb-2"
+              >
+                <h3 className="text-sm font-bold text-gray-900">
+                  {item.product_id}
+                </h3>
+                <p className="text-sm text-gray-700">
+                  Quantity: {item.quantity}, Price: ${item.price.toFixed(2)}
+                </p>
+                <ul className="text-sm text-gray-600">
+                  {item.selected_attributes.map((attr) => (
+                    <li key={attr.name}>
+                      <span className="font-medium">{attr.name}:</span>{" "}
+                      {attr.value}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+          <button
+            className="w-full py-2 px-4 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-500"
+            onClick={() => toast.dismiss(t.id)}
+          >
+            Dismiss
+          </button>
+        </div>
+      </div>
+    ),
+    { duration: Infinity }
+  );
+}

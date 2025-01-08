@@ -3,6 +3,7 @@ import React from "react";
 import Header from "./components/header";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import AppRoutes from "./components/appRoutes";
+import { Toaster } from "react-hot-toast";
 
 const client = new ApolloClient({
   uri: "http://localhost/scandiweb/graphql.php",
@@ -14,6 +15,7 @@ class App extends React.Component {
     return (
       <ApolloProvider client={client}>
         <div className="px-4 md:px-28">
+          <Toaster toastOptions={{ duration: 4000 }} />
           <Header />
 
           <AppRoutes />

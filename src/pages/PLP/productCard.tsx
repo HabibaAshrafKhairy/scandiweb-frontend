@@ -6,6 +6,7 @@ import { Product } from "../../types";
 import { connect } from "react-redux";
 import { addToCart } from "../../reducers/cartSlice";
 import { toKebabCase } from "../../utils/helpers";
+import toast from "react-hot-toast";
 
 interface CartProps {
   addToCart: typeof addToCart;
@@ -59,6 +60,8 @@ class ProductCard extends React.Component<CombinedProps> {
                     selectedItemName: attr.items[0].value,
                   })),
                 });
+
+                toast.success("Added item to cart");
               }}
             >
               <img

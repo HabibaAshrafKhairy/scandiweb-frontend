@@ -10,6 +10,7 @@ import { GET_PRODUCT_BY_ID } from "../../graphql/queries";
 import { removeTags } from "../../utils/helpers";
 import { addToCart } from "../../reducers/cartSlice";
 import { connect } from "react-redux";
+import { toast } from "react-hot-toast";
 
 interface GraphQLResponse {
   product: Product;
@@ -132,6 +133,8 @@ class ProductDetailsPage extends React.Component<CombinedProps, StateType> {
                 selectedAttributes: this.state.selectedAttributes || [],
                 amount: 1,
               });
+
+              toast.success("Added item to cart!");
             }}
             disabled={!product.in_stock}
           >
