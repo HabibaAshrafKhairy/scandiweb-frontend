@@ -1,4 +1,5 @@
 import React from "react";
+import { toKebabCase } from "../../utils/helpers";
 
 interface State {
   selectedColor: string;
@@ -31,8 +32,16 @@ class ProductColor extends React.Component<PropsType, State> {
 
     if (!colors || colors?.length === 0) return;
 
+    const attrNameInKebabCase = toKebabCase("Color");
+
     return (
-      <div data-testid="product-attribute-${attribute in kebab case}">
+      <div
+        data-testid={
+          isCartItem
+            ? `cart-item-attribute-${attrNameInKebabCase}`
+            : `product-attribute-${attrNameInKebabCase}`
+        }
+      >
         <p
           className={`text-lg font-bold pb-2 ${
             this.props.size === "sm" && "text-sm font-normal pb-1"
@@ -45,6 +54,11 @@ class ProductColor extends React.Component<PropsType, State> {
             const isSelected = this.state.selectedColor === color.value;
             return (
               <button
+                data-testid={`${
+                  isSelected
+                    ? `cart-item-attribute-${attrNameInKebabCase}-${attrNameInKebabCase}-selected`
+                    : `cart-item-attribute-${attrNameInKebabCase}-${attrNameInKebabCase}`
+                }`}
                 key={color.id}
                 disabled={isCartItem}
                 style={{ backgroundColor: color.value }}

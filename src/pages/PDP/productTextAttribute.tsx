@@ -1,5 +1,6 @@
 import React from "react";
 import { Attribute } from "../../types";
+import { toKebabCase } from "../../utils/helpers";
 
 interface State {
   selectedTextAttributeId: number;
@@ -32,8 +33,16 @@ class ProductTextAttribute extends React.Component<PropsType, State> {
 
     if (!attribute) return;
 
+    const attrNameInKebabCase = toKebabCase(attribute?.name);
+
     return (
-      <div data-testid="product-attribute-${attribute in kebab case}">
+      <div
+        data-testid={
+          isCartItem
+            ? `cart-item-attribute-${attrNameInKebabCase}`
+            : `product-attribute-${attrNameInKebabCase}`
+        }
+      >
         <p
           className={`text-lg font-bold pb-2 ${
             this.props.size === "sm" && "text-sm font-normal pb-1"
@@ -47,6 +56,11 @@ class ProductTextAttribute extends React.Component<PropsType, State> {
               this.state.selectedTextAttributeId === attributeItem.id;
             return (
               <button
+                data-testid={`${
+                  isSelected
+                    ? `cart-item-attribute-${attrNameInKebabCase}-${attrNameInKebabCase}-selected`
+                    : `cart-item-attribute-${attrNameInKebabCase}-${attrNameInKebabCase}`
+                }`}
                 key={attributeItem.id}
                 disabled={isCartItem}
                 className={`border border-[#1D1F22] w-16 h-11 flex items-center justify-center p-2 ${

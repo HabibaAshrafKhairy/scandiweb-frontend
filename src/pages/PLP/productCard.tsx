@@ -5,6 +5,7 @@ import withRouter, { RouterProps } from "../../utils/withRouter";
 import { Product } from "../../types";
 import { connect } from "react-redux";
 import { addToCart } from "../../reducers/cartSlice";
+import { toKebabCase } from "../../utils/helpers";
 
 interface CartProps {
   addToCart: typeof addToCart;
@@ -26,7 +27,7 @@ class ProductCard extends React.Component<CombinedProps> {
 
     const cardContent = (
       <div
-        data-testid="product-${product name in kebab case}"
+        data-testid={`product-${toKebabCase(product.name)}`}
         className={`p-4 w-full h-full flex flex-col !max-w-96 relative ${
           product.in_stock &&
           "hover:shadow-card transition-shadow duration-300 hover:cursor-pointer"

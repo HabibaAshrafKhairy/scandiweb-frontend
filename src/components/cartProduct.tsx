@@ -15,10 +15,7 @@ class CartProduct extends React.Component<CartProps> {
     const { removeFromCart, addToCart, cartItem } = this.props;
 
     return (
-      <div
-        className="grid grid-cols-[1fr,_auto,_1fr] gap-2"
-        data-testid="cart-item-attribute-${attribute name in kebab case}"
-      >
+      <div className="grid grid-cols-[1fr,_auto,_1fr] gap-2">
         <div className="flex flex-col gap-2">
           <p className="text-lg font-light">{cartItem.name}</p>
           <p className="font-semibold text-base">
