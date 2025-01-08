@@ -6,8 +6,13 @@ export const PLACE_ORDER = gql`
       id
       total
       items {
+        product_id
         quantity
         price
+        selected_attributes {
+          name
+          value
+        }
       }
     }
   }
