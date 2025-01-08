@@ -8,13 +8,15 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { RootState } from "../store";
 import { CartItem } from "../types";
+import { toggleCartOverlay } from "../reducers/cartSlice";
 
 interface State {
-  showCartOverlay: boolean;
   showMobileNav: boolean;
 }
 
 interface CartProps {
+  isCartOverlayOpen: boolean;
+  toggleCartOverlay: typeof toggleCartOverlay;
   cartItems: CartItem[];
 }
 
@@ -22,15 +24,14 @@ class Header extends React.Component<CartProps, State> {
   constructor(props: CartProps) {
     super(props);
     this.state = {
-      showCartOverlay: false,
       showMobileNav: false,
     };
   }
 
   render(): React.ReactNode {
-    const { showCartOverlay, showMobileNav } = this.state;
+    const { showMobileNav } = this.state;
 
-    const { cartItems } = this.props;
+    const { isCartOverlayOpen, cartItems, toggleCartOverlay } = this.props;
 
     const cartInfo = cartItems.reduce(
       (acc, item) => {
@@ -72,11 +73,7 @@ class Header extends React.Component<CartProps, State> {
 
         {/* Cart Icon */}
         <button
-          onClick={() =>
-            this.setState((prev) => ({
-              showCartOverlay: !prev.showCartOverlay,
-            }))
-          }
+          onClick={() => toggleCartOverlay()}
           className="relative"
           data-testid="cart-btn"
         >
@@ -89,11 +86,11 @@ class Header extends React.Component<CartProps, State> {
         </button>
 
         {/* Cart Overlay */}
-        {showCartOverlay && <CartOverlay />}
-        {showCartOverlay && (
+        {isCartOverlayOpen && <CartOverlay />}
+        {isCartOverlayOpen && (
           <div
             className="fixed inset-0 top-20 bg-black bg-opacity-50 z-20"
-            onClick={() => this.setState({ showCartOverlay: false })}
+            onClick={() => toggleCartOverlay()}
           ></div>
         )}
 
@@ -120,6 +117,11 @@ class Header extends React.Component<CartProps, State> {
 
 const mapStateToProps = (state: RootState) => ({
   cartItems: state.cart.items,
+  isCartOverlayOpen: state.cart.isCartOverlayOpen,
 });
 
-export default connect(mapStateToProps)(Header);
+const mapDispatchToProps = {
+  toggleCartOverlay,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

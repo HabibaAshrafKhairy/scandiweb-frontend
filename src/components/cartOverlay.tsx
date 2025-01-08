@@ -3,7 +3,12 @@ import CartProduct from "./cartProduct";
 import { connect } from "react-redux";
 import { RootState } from "../store";
 import { CartItem, OrderItem, PlaceOrderResponse } from "../types";
-import { addToCart, emptyCart, removeFromCart } from "../reducers/cartSlice";
+import {
+  addToCart,
+  emptyCart,
+  removeFromCart,
+  toggleCartOverlay,
+} from "../reducers/cartSlice";
 import { graphql } from "@apollo/client/react/hoc";
 import { PLACE_ORDER } from "../graphql/mutations";
 import { MutationFunction } from "@apollo/client";
@@ -14,6 +19,7 @@ interface ReduxCartProps {
   removeFromCart: typeof removeFromCart;
   addToCart: typeof addToCart;
   emptyCart: typeof emptyCart;
+  toggleCartOverlay: typeof toggleCartOverlay;
 }
 
 interface GraphqlProps {
@@ -27,7 +33,7 @@ type CombinedProps = ReduxCartProps & GraphqlProps;
 
 class CartOverlay extends React.Component<CombinedProps> {
   handlePlaceOrder = () => {
-    const { cartItems, placeOrder, emptyCart } = this.props;
+    const { cartItems, placeOrder, emptyCart, toggleCartOverlay } = this.props;
 
     const items = cartItems.map((item) => ({
       product_id: item.id,
@@ -44,6 +50,7 @@ class CartOverlay extends React.Component<CombinedProps> {
       .then((response) => {
         console.log("Order placed successfully", response.data);
         emptyCart();
+        toggleCartOverlay();
         showOrderToast(response.data?.placeOrder);
       })
       .catch((error: any) => {
@@ -120,6 +127,7 @@ const mapDispatchToProps = {
   removeFromCart,
   addToCart,
   emptyCart,
+  toggleCartOverlay,
 };
 
 export default connect(

@@ -8,7 +8,7 @@ import { Product, SelectedAttribute } from "../../types";
 import { DataProps, graphql } from "@apollo/client/react/hoc";
 import { GET_PRODUCT_BY_ID } from "../../graphql/queries";
 import { removeTags } from "../../utils/helpers";
-import { addToCart } from "../../reducers/cartSlice";
+import { addToCart, toggleCartOverlay } from "../../reducers/cartSlice";
 import { connect } from "react-redux";
 import { toast } from "react-hot-toast";
 
@@ -21,6 +21,7 @@ type GraphQLProps = DataProps<GraphQLResponse>;
 
 interface CartProps {
   addToCart: typeof addToCart;
+  toggleCartOverlay: typeof toggleCartOverlay;
 }
 
 // Combined props for the PDP component
@@ -82,7 +83,7 @@ class ProductDetailsPage extends React.Component<CombinedProps, StateType> {
   }
 
   render(): React.ReactNode {
-    const { data, addToCart } = this.props;
+    const { data, addToCart, toggleCartOverlay } = this.props;
 
     // Handle loading or error states from GraphQL
     if (!data) return;
@@ -135,6 +136,7 @@ class ProductDetailsPage extends React.Component<CombinedProps, StateType> {
               });
 
               toast.success("Added item to cart!");
+              toggleCartOverlay && toggleCartOverlay();
             }}
             disabled={!product.in_stock}
           >
@@ -152,6 +154,7 @@ class ProductDetailsPage extends React.Component<CombinedProps, StateType> {
 
 const mapDispatchToProps = {
   addToCart,
+  toggleCartOverlay,
 };
 
 export default connect(
