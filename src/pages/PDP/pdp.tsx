@@ -88,7 +88,7 @@ class ProductDetailsPage extends React.Component<CombinedProps, StateType> {
     // Handle loading or error states from GraphQL
     if (!data) return;
     if (data?.loading) return <p>Loading...</p>;
-    if (data?.error) return <p>Error: {data.error.message}</p>;
+    if (data?.error) toast.error("Failed to load product details");
 
     const product = data?.product;
 

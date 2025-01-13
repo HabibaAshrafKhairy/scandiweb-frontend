@@ -5,6 +5,7 @@ import ProductsList from "./productsList";
 import { Product } from "../../types";
 import { DataProps, graphql } from "@apollo/client/react/hoc";
 import { GET_PRODUCTS } from "../../graphql/queries";
+import toast from "react-hot-toast";
 
 interface GraphQLResponse {
   products: Product[];
@@ -33,7 +34,7 @@ class ProductsListPage extends React.Component<CombinedProps> {
     // Handle loading or error states from GraphQL
     if (!data) return;
     if (data?.loading) return <p>Loading...</p>;
-    if (data?.error) return <p>Error: {data.error.message}</p>;
+    if (data?.error) toast.error("Failed to load products");
 
     const products = data?.products || []; // Default to empty array if no products
 

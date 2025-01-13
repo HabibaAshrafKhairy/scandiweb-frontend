@@ -4,6 +4,7 @@ import withRouter, { RouterProps } from "../utils/withRouter";
 import { DataProps, graphql } from "@apollo/client/react/hoc";
 import { GET_CATEGORIES } from "../graphql/queries";
 import { Category } from "../types";
+import toast from "react-hot-toast";
 
 interface GraphQLResponse {
   categories: Category[];
@@ -27,7 +28,7 @@ class Navigation extends React.Component<CombinedProps> {
     // Handle loading or error states from GraphQL
     if (!data) return;
     if (data?.loading) return <p>Loading...</p>;
-    if (data?.error) return <p>Error: {data.error.message}</p>;
+    if (data?.error) toast.error("Failed to load categories");
 
     const categories = data?.categories || []; // Default to empty array if no categories
     const pathname = location.pathname;
