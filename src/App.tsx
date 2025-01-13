@@ -5,8 +5,10 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import AppRoutes from "./components/appRoutes";
 import { Toaster } from "react-hot-toast";
 
+// okay now this is working as it used to be http://localhost/scandiweb/graphql.php old file and no cors issues and htaccess must be in public folder nt root
+
 const client = new ApolloClient({
-  uri: "http://localhost/scandiweb/graphql.php",
+  uri: "http://localhost:8080/graphql",
   cache: new InMemoryCache(),
 });
 
