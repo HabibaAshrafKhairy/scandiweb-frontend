@@ -12,6 +12,7 @@ export const PLACE_ORDER = gql`
         selected_attributes {
           name
           value
+          display_value
         }
       }
     }

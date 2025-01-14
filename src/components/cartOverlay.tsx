@@ -144,9 +144,7 @@ function showOrderToast(response?: PlaceOrderResponse) {
   toast.custom(
     (t) => (
       <div
-        className={`max-w-md w-full p-4 bg-white rounded-lg shadow-lg border border-gray-200 ${
-          t.visible ? "animate-enter" : "animate-leave"
-        }`}
+        className={`max-w-md  w-full p-4 bg-white rounded-lg shadow-lg border border-gray-200 `}
       >
         <div className="flex flex-col gap-4">
           <h2 className="text-lg font-bold text-green-600">
@@ -156,12 +154,9 @@ function showOrderToast(response?: PlaceOrderResponse) {
             Your order total is{" "}
             <span className="font-semibold">${response.total.toFixed(2)}</span>.
           </p>
-          <div className="flex flex-col gap-2">
-            {response.items.map((item) => (
-              <div
-                key={item.product_id}
-                className="border-b border-gray-300 pb-2 mb-2"
-              >
+          <div className="flex flex-col gap-2 max-h-[400px] overflow-y-auto">
+            {response.items.map((item, i) => (
+              <div key={i} className="border-b border-gray-300 pb-2 mb-2">
                 <h3 className="text-sm font-bold text-gray-900">
                   {item.product_id}
                 </h3>
@@ -172,7 +167,7 @@ function showOrderToast(response?: PlaceOrderResponse) {
                   {item.selected_attributes.map((attr) => (
                     <li key={attr.name}>
                       <span className="font-medium">{attr.name}:</span>{" "}
-                      {attr.value}
+                      {attr.display_value}
                     </li>
                   ))}
                 </ul>

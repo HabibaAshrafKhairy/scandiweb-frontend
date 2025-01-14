@@ -53,6 +53,10 @@ export interface PlaceOrderResponse {
     product_id: string;
     quantity: number;
     price: number;
-    selected_attributes: { name: string; value: string }[];
+    selected_attributes: {
+      name: string;
+      value: string;
+      display_value: string;
+    }[];
   }[];
 }

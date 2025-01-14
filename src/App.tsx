@@ -17,7 +17,7 @@ class App extends React.Component {
     return (
       <ApolloProvider client={client}>
         <div className="px-4 md:px-28">
-          <Toaster toastOptions={{ duration: 4000 }} />
+          <Toaster />
           <Header />
 
           <AppRoutes />
