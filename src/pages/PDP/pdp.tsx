@@ -94,8 +94,6 @@ class ProductDetailsPage extends React.Component<CombinedProps, StateType> {
 
     if (!product) return;
 
-    console.log("selected attributes", this.state.selectedAttributes);
-
     return (
       <div className="py-4 md:py-20 flex flex-col gap-8 lg:grid grid-cols-[60%,30%] md:gap-24">
         <ProductImages imageLinks={product?.gallery} />
