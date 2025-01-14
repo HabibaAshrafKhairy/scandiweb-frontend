@@ -5,8 +5,10 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import AppRoutes from "./components/appRoutes";
 import { Toaster } from "react-hot-toast";
 
+console.log(import.meta.env);
+
 const client = new ApolloClient({
-  uri: "http://localhost:8080/graphql",
+  uri: import.meta.env.VITE_GRAPHQL_API,
   cache: new InMemoryCache(),
 });
 
