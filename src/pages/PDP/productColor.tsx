@@ -54,11 +54,15 @@ class ProductColor extends React.Component<PropsType, State> {
             const isSelected = this.state.selectedColor === color.value;
             return (
               <button
-                data-testid={`${
-                  isSelected
-                    ? `cart-item-attribute-${attrNameInKebabCase}-${attrNameInKebabCase}-selected`
-                    : `cart-item-attribute-${attrNameInKebabCase}-${attrNameInKebabCase}`
-                }`}
+                data-testid={
+                  isCartItem
+                    ? `${
+                        isSelected
+                          ? `cart-item-attribute-${attrNameInKebabCase}-${color.value}-selected`
+                          : `cart-item-attribute-${attrNameInKebabCase}-${color.value}`
+                      }`
+                    : undefined
+                }
                 key={color.id}
                 disabled={isCartItem}
                 style={{ backgroundColor: color.value }}

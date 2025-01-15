@@ -56,11 +56,15 @@ class ProductTextAttribute extends React.Component<PropsType, State> {
               this.state.selectedTextAttributeId === attributeItem.id;
             return (
               <button
-                data-testid={`${
-                  isSelected
-                    ? `cart-item-attribute-${attrNameInKebabCase}-${attrNameInKebabCase}-selected`
-                    : `cart-item-attribute-${attrNameInKebabCase}-${attrNameInKebabCase}`
-                }`}
+                data-testid={
+                  isCartItem
+                    ? `${
+                        isSelected
+                          ? `cart-item-attribute-${attrNameInKebabCase}-${attributeItem.value}-selected`
+                          : `cart-item-attribute-${attrNameInKebabCase}-${attributeItem.value}`
+                      }`
+                    : undefined
+                }
                 key={attributeItem.id}
                 disabled={isCartItem}
                 className={`border border-[#1D1F22] w-14 h-8 flex items-center justify-center p-4 rounded-sm ${
