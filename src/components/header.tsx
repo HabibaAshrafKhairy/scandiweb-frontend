@@ -28,20 +28,46 @@ class Header extends React.Component<CartProps, State> {
     };
   }
 
-  render(): React.ReactNode {
-    const { showMobileNav } = this.state;
-
-    const { isCartOverlayOpen, cartItems, toggleCartOverlay } = this.props;
-
-    const cartInfo = cartItems.reduce(
-      (acc, item) => {
-        return {
-          totalCount: acc.totalCount + item.amount,
-          totalPrice: acc.totalPrice + item.amount * item.price,
-        };
-      },
+  calculateCartInfo(cartItems: CartItem[]) {
+    return cartItems.reduce(
+      (acc, item) => ({
+        totalCount: acc.totalCount + item.amount,
+        totalPrice: acc.totalPrice + item.amount * item.price,
+      }),
       { totalCount: 0, totalPrice: 0 }
     );
+  }
+
+  renderCartBadge(cartInfo: { totalCount: number }) {
+    return (
+      cartInfo.totalCount > 0 && (
+        <div className="absolute bottom-1/3 left-[80%] w-6 h-6 bg-[#1D1F22] rounded-full flex items-center justify-center text-xs md:text-sm text-white font-bold">
+          {cartInfo.totalCount}
+        </div>
+      )
+    );
+  }
+
+  renderMobileNav() {
+    return (
+      <div className="fixed inset-0 bg-white z-30 p-4 lg:hidden">
+        <Navigation
+          closeMobileNav={() => this.setState({ showMobileNav: false })}
+        />
+        <button
+          className="absolute top-4 right-4 text-xl"
+          onClick={() => this.setState({ showMobileNav: false })}
+        >
+          ✕
+        </button>
+      </div>
+    );
+  }
+
+  render(): React.ReactNode {
+    const { showMobileNav } = this.state;
+    const { isCartOverlayOpen, cartItems, toggleCartOverlay } = this.props;
+    const cartInfo = this.calculateCartInfo(cartItems);
 
     return (
       <header className="flex items-center justify-between py-3 lg:py-6 relative">
@@ -74,11 +100,7 @@ class Header extends React.Component<CartProps, State> {
           data-testid="cart-btn"
         >
           <img src={cartIcon} alt="cart icon" className="h-6" />
-          {cartInfo.totalCount > 0 && (
-            <div className="absolute bottom-1/3 left-[80%] w-6 h-6 bg-[#1D1F22] rounded-full flex items-center justify-center text-xs md:text-sm text-white font-bold">
-              {cartInfo.totalCount}
-            </div>
-          )}
+          {this.renderCartBadge(cartInfo)}
         </button>
 
         {/* Cart Overlay */}
@@ -91,21 +113,7 @@ class Header extends React.Component<CartProps, State> {
         )}
 
         {/* Mobile Navigation */}
-        {showMobileNav && (
-          <div className="fixed inset-0 bg-white z-30 p-4 lg:hidden">
-            <Navigation
-              closeMobileNav={() => {
-                this.setState({ showMobileNav: false });
-              }}
-            />
-            <button
-              className="absolute top-4 right-4 text-xl"
-              onClick={() => this.setState({ showMobileNav: false })}
-            >
-              ✕
-            </button>
-          </div>
-        )}
+        {showMobileNav && this.renderMobileNav()}
       </header>
     );
   }
