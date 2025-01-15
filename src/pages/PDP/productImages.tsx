@@ -20,6 +20,9 @@ class ProductImages extends React.Component<PropsType, State> {
 
     if (!imageLinks || imageLinks.length === 0) return;
 
+    const isLastImage = this.state.selectedImageIndex === imageLinks.length - 1;
+    const isFirstImage = this.state.selectedImageIndex === 0;
+
     return (
       <div
         className="grid md:grid-cols-[auto,1fr] gap-x-10 gap-y-5"
@@ -51,7 +54,8 @@ class ProductImages extends React.Component<PropsType, State> {
         {/* Main Image */}
         <div className="w-full md:max-h-[50vh] aspect-square bg-[#fcfbfc] relative transition-all duration-300 rounded-xl mx-auto">
           {/* Left Arrow */}
-          <div
+          <button
+            disabled={isFirstImage}
             onClick={() => {
               this.setState((prev) => {
                 if (prev.selectedImageIndex === 0) return;
@@ -60,10 +64,12 @@ class ProductImages extends React.Component<PropsType, State> {
                 };
               });
             }}
-            className="absolute w-8 h-8 bg-[#000000BA] flex items-center justify-center top-1/2 -translate-y-1/2 left-4 cursor-pointer rounded-md z-10"
+            className={`absolute w-8 h-8 bg-[#000000BA] flex items-center justify-center top-1/2 -translate-y-1/2 left-4 cursor-pointer rounded-md z-10 ${
+              isFirstImage ? "bg-[#D3D3D3]" : ""
+            }`}
           >
             <img src={leftArrow} alt="left arrow" />
-          </div>
+          </button>
 
           <img
             src={imageLinks[this.state.selectedImageIndex]}
@@ -72,7 +78,8 @@ class ProductImages extends React.Component<PropsType, State> {
           />
 
           {/* Right Arrow */}
-          <div
+          <button
+            disabled={isLastImage}
             onClick={() => {
               this.setState((prev) => {
                 if (prev.selectedImageIndex === imageLinks.length - 1) return;
@@ -81,10 +88,12 @@ class ProductImages extends React.Component<PropsType, State> {
                 };
               });
             }}
-            className="absolute w-8 h-8 bg-[#000000BA] flex items-center justify-center top-1/2 -translate-y-1/2 right-4 cursor-pointer rotate-180 rounded-md z-10"
+            className={`absolute w-8 h-8 bg-[#000000BA] flex items-center justify-center top-1/2 -translate-y-1/2 right-4 cursor-pointer rotate-180 rounded-md z-10 ${
+              isLastImage ? "bg-[#D3D3D3]" : ""
+            }`}
           >
             <img src={leftArrow} alt="left arrow" />
-          </div>
+          </button>
         </div>
       </div>
     );
