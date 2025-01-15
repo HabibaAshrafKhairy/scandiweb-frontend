@@ -49,7 +49,7 @@ class ProductColor extends React.Component<PropsType, State> {
         >
           COLOR:
         </p>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           {colors.map((color) => {
             const isSelected = this.state.selectedColor === color.value;
             return (

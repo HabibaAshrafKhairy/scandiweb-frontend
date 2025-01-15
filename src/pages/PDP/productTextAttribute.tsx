@@ -50,7 +50,7 @@ class ProductTextAttribute extends React.Component<PropsType, State> {
         >
           {attribute?.name.toUpperCase()}:
         </p>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-2">
           {attribute?.items?.map((attributeItem) => {
             const isSelected =
               this.state.selectedTextAttributeId === attributeItem.id;
@@ -63,9 +63,9 @@ class ProductTextAttribute extends React.Component<PropsType, State> {
                 }`}
                 key={attributeItem.id}
                 disabled={isCartItem}
-                className={`border border-[#1D1F22] w-16 h-11 flex items-center justify-center p-2 ${
+                className={`border border-[#1D1F22] text-xs w-10 h-8 flex items-center justify-center p-2 ${
                   isSelected ? "text-white bg-[#1D1F22]" : "text-[#1D1F22]"
-                } ${this.props.size === "sm" && "w-10 h-8 text-xs"}`}
+                }`}
                 onClick={() => {
                   this.setState({
                     selectedTextAttributeId: attributeItem.id,
