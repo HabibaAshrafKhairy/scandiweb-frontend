@@ -74,7 +74,7 @@ class ProductImages extends React.Component<PropsType, State> {
           <img
             src={imageLinks[this.state.selectedImageIndex]}
             alt="product image"
-            className="w-full h-full object-contain rounded-lg"
+            className="w-full h-full object-contain rounded-lg transition-transform duration-500 ease-in-out"
           />
 
           {/* Right Arrow */}
