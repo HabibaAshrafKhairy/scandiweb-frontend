@@ -13,12 +13,57 @@ class ProductImages extends React.Component<PropsType, State> {
   constructor(props: PropsType) {
     super(props);
     this.state = { selectedImageIndex: 0 };
+    // Create refs for each thumbnail to scroll into view when selected
     this.thumbnailRefs = props.imageLinks.map(() =>
       React.createRef<HTMLDivElement>()
     );
   }
 
   thumbnailRefs: React.RefObject<HTMLDivElement>[];
+
+  componentDidMount() {
+    // Add the keydown event listener when the component mounts
+    window.addEventListener("keydown", this.handleKeyDown);
+  }
+
+  componentWillUnmount() {
+    // Clean up the keydown event listener when the component unmounts
+    window.removeEventListener("keydown", this.handleKeyDown);
+  }
+
+  handleKeyDown = (event: KeyboardEvent) => {
+    const { selectedImageIndex } = this.state;
+    const { imageLinks } = this.props;
+
+    if (event.key === "ArrowLeft" && selectedImageIndex > 0) {
+      // Go to the previous image
+      this.setState({ selectedImageIndex: selectedImageIndex - 1 }, () => {
+        this.thumbnailRefs[
+          this.state.selectedImageIndex
+        ].current?.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+          inline: "center",
+        });
+      });
+    }
+
+    if (
+      event.key === "ArrowRight" &&
+      selectedImageIndex < imageLinks.length - 1
+    ) {
+      // Go to the next image
+      this.setState({ selectedImageIndex: selectedImageIndex + 1 }, () => {
+        this.thumbnailRefs[
+          this.state.selectedImageIndex
+        ].current?.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+          inline: "center",
+        });
+      });
+    }
+  };
 
   render(): React.ReactNode {
     const { imageLinks } = this.props;
@@ -32,13 +77,14 @@ class ProductImages extends React.Component<PropsType, State> {
       <div
         className="grid md:grid-cols-[auto,1fr] gap-x-10 gap-y-5"
         data-testid="product-gallery"
+        tabIndex={0} // Make the container focusable for keyboard events
       >
-        {/* Thumbnails Gallery (On the Left for Larger Screens) */}
+        {/* Thumbnails Gallery */}
         <div className="flex md:flex-col gap-5 md:max-h-[50vh] md:overflow-y-auto overflow-x-auto px-2">
           {imageLinks.map((link, index) => (
             <div
-              ref={this.thumbnailRefs[index]}
               key={index}
+              ref={this.thumbnailRefs[index]}
               className={`flex-shrink-0 w-20 h-20 cursor-pointer transition-all duration-300 rounded-md ${
                 this.state.selectedImageIndex === index
                   ? "border-2 border-[#5ECE7B]"
@@ -49,7 +95,7 @@ class ProductImages extends React.Component<PropsType, State> {
                 this.thumbnailRefs[index].current?.scrollIntoView({
                   behavior: "smooth",
                   block: "nearest",
-                  inline: "center", // Centers the thumbnail in the container
+                  inline: "center",
                 });
               }}
             >
@@ -97,7 +143,7 @@ class ProductImages extends React.Component<PropsType, State> {
           <img
             src={imageLinks[this.state.selectedImageIndex]}
             alt="product image"
-            className="w-full h-full object-contain rounded-lg transition-transform duration-500 ease-in-out"
+            className="w-full h-full object-contain rounded-lg"
           />
 
           {/* Right Arrow */}
