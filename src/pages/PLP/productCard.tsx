@@ -4,12 +4,13 @@ import { Link } from "react-router-dom";
 import withRouter, { RouterProps } from "../../utils/withRouter";
 import { Product } from "../../types";
 import { connect } from "react-redux";
-import { addToCart } from "../../reducers/cartSlice";
+import { addToCart, toggleCartOverlay } from "../../reducers/cartSlice";
 import { toKebabCase } from "../../utils/helpers";
 import toast from "react-hot-toast";
 
 interface CartProps {
   addToCart: typeof addToCart;
+  toggleCartOverlay: typeof toggleCartOverlay;
 }
 
 type CombinedProps = RouterProps & { product: Product } & CartProps;
@@ -21,7 +22,7 @@ class ProductCard extends React.Component<CombinedProps> {
   }
 
   render(): React.ReactNode {
-    const { location, product, addToCart } = this.props;
+    const { location, product, addToCart, toggleCartOverlay } = this.props;
     const pathname = location.pathname;
 
     if (!product) return;
@@ -62,6 +63,7 @@ class ProductCard extends React.Component<CombinedProps> {
                 });
 
                 toast.success("Added item to cart");
+                toggleCartOverlay();
               }}
             >
               <img
@@ -90,6 +92,7 @@ class ProductCard extends React.Component<CombinedProps> {
 
 const mapDispatchToProps = {
   addToCart: addToCart,
+  toggleCartOverlay,
 };
 
 export default connect(null, mapDispatchToProps)(withRouter(ProductCard));
