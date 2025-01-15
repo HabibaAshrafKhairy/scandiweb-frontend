@@ -78,7 +78,10 @@ class CartOverlay extends React.Component<CombinedProps> {
     );
 
     return (
-      <div className="absolute w-full md:w-1/2 lg:w-1/4 top-full right-0 px-4 py-8 flex flex-col gap-8 z-30 bg-white rounded-md">
+      <div
+        data-testid="cart-overlay"
+        className="absolute w-full md:w-1/2 lg:w-1/4 top-full right-0 px-4 py-8 flex flex-col gap-8 z-30 bg-white rounded-md"
+      >
         <div className="flex flex-col gap-8">
           <p className="font-bold">
             My Bag,{" "}
