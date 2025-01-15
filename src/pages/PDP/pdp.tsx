@@ -27,8 +27,13 @@ interface CartProps {
 // Combined props for the PDP component
 type CombinedProps = RouterProps & Partial<GraphQLProps> & Partial<CartProps>;
 
+type SelectedAttributeMap = Record<
+  string,
+  { itemId: number; itemName: string } | null | undefined
+>;
+
 interface StateType {
-  selectedAttributes: SelectedAttribute[] | undefined;
+  selectedAttributes: SelectedAttributeMap;
 }
 
 class ProductDetailsPage extends React.Component<CombinedProps, StateType> {
@@ -38,34 +43,8 @@ class ProductDetailsPage extends React.Component<CombinedProps, StateType> {
     this.selectAttributeHandler = this.selectAttributeHandler.bind(this);
 
     this.state = {
-      selectedAttributes: [],
+      selectedAttributes: {},
     };
-  }
-
-  componentDidMount() {
-    if (this.props.data?.product?.attributes) {
-      const initialState = this.props.data.product.attributes.map((attr) => ({
-        attributeSetName: attr.name,
-        selectedItemId: attr.items[0]?.id, // Use the first item's value as the default
-        selectedItemName: attr.items[0]?.value,
-      }));
-
-      this.setState({ selectedAttributes: initialState });
-    }
-  }
-
-  componentDidUpdate(prevProps: CombinedProps) {
-    // Reinitialize if the product changes
-    if (prevProps.data?.product?.id !== this.props.data?.product?.id) {
-      const initialState = this.props.data?.product?.attributes?.map(
-        (attr) => ({
-          attributeSetName: attr.name,
-          selectedItemId: attr.items[0]?.id,
-          selectedItemName: attr.items[0]?.value,
-        })
-      );
-      this.setState({ selectedAttributes: initialState });
-    }
   }
 
   selectAttributeHandler(
@@ -74,16 +53,47 @@ class ProductDetailsPage extends React.Component<CombinedProps, StateType> {
     selectedItemName: string
   ) {
     this.setState((prevState) => ({
-      selectedAttributes: prevState.selectedAttributes?.map((attr) =>
-        attr.attributeSetName === attrSetName
-          ? { ...attr, selectedItemId, selectedItemName }
-          : attr
-      ),
+      selectedAttributes: {
+        ...prevState.selectedAttributes,
+        [attrSetName]: { itemId: selectedItemId, itemName: selectedItemName },
+      },
     }));
   }
 
-  render(): React.ReactNode {
+  addToCartHandler = () => {
     const { data, addToCart, toggleCartOverlay } = this.props;
+
+    const product = data?.product;
+
+    if (!product) return;
+
+    if (!addToCart) return;
+
+    const mappedSelectedAttributes = Object.entries(
+      this.state.selectedAttributes
+    ).reduce<SelectedAttribute[]>((acc, [currKey, currValue]) => {
+      if (currValue) {
+        acc.push({
+          selectedItemId: currValue.itemId,
+          selectedItemName: currValue.itemName,
+          attributeSetName: currKey,
+        });
+      }
+      return acc;
+    }, []);
+
+    addToCart({
+      ...product,
+      selectedAttributes: mappedSelectedAttributes,
+      amount: 1,
+    });
+
+    toast.success("Added item to cart!");
+    toggleCartOverlay && toggleCartOverlay();
+  };
+
+  render(): React.ReactNode {
+    const { data } = this.props;
 
     // Handle loading or error states from GraphQL
     if (!data) return;
@@ -91,6 +101,12 @@ class ProductDetailsPage extends React.Component<CombinedProps, StateType> {
     if (data?.error) toast.error("Failed to load product details");
 
     const product = data?.product;
+
+    const productAttributes = product?.attributes;
+
+    const allAttributesSelected = productAttributes?.every((attr) => {
+      return !!this.state.selectedAttributes[attr.name];
+    });
 
     if (!product) return;
 
@@ -101,7 +117,7 @@ class ProductDetailsPage extends React.Component<CombinedProps, StateType> {
         <div className="flex flex-col gap-8  max-w-72">
           <p className="text-3xl font-semibold">{product?.name}</p>
 
-          {product?.attributes?.map((attribute) => {
+          {productAttributes?.map((attribute) => {
             if (attribute?.type === "swatch")
               return (
                 <ProductColor
@@ -125,18 +141,8 @@ class ProductDetailsPage extends React.Component<CombinedProps, StateType> {
           <button
             className="p-4 text-base font-semibold text-white bg-[#5ECE7B] disabled:bg-slate-400 rounded-lg"
             data-testid="add-to-cart"
-            onClick={() => {
-              if (!addToCart) return;
-              addToCart({
-                ...product,
-                selectedAttributes: this.state.selectedAttributes || [],
-                amount: 1,
-              });
-
-              toast.success("Added item to cart!");
-              toggleCartOverlay && toggleCartOverlay();
-            }}
-            disabled={!product.in_stock}
+            onClick={this.addToCartHandler}
+            disabled={!product.in_stock || !allAttributesSelected}
           >
             ADD TO CART
           </button>

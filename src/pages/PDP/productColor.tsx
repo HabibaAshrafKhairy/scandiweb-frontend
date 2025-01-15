@@ -2,7 +2,7 @@ import React from "react";
 import { toKebabCase } from "../../utils/helpers";
 
 interface State {
-  selectedColor: string;
+  selectedColor: string | null;
 }
 
 interface PropsType {
@@ -23,7 +23,7 @@ class ProductColor extends React.Component<PropsType, State> {
     this.state = {
       selectedColor: props?.isCartItem
         ? (props?.cartItemSelectedColor as string)
-        : props?.colors?.[0].value,
+        : null,
     };
   }
 

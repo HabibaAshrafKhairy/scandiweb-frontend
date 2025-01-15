@@ -3,7 +3,7 @@ import { Attribute } from "../../types";
 import { toKebabCase } from "../../utils/helpers";
 
 interface State {
-  selectedTextAttributeId: number;
+  selectedTextAttributeId: number | null;
 }
 
 interface PropsType {
@@ -24,7 +24,7 @@ class ProductTextAttribute extends React.Component<PropsType, State> {
     this.state = {
       selectedTextAttributeId: props?.isCartItem
         ? (props?.cartItemSelectedAttributeId as number)
-        : props?.attribute?.items[0].id,
+        : null,
     };
   }
 
