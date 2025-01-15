@@ -63,9 +63,9 @@ class ProductTextAttribute extends React.Component<PropsType, State> {
                 }`}
                 key={attributeItem.id}
                 disabled={isCartItem}
-                className={`border border-[#1D1F22] text-xs w-10 h-8 flex items-center justify-center p-2 rounded-sm ${
+                className={`border border-[#1D1F22] w-14 h-8 flex items-center justify-center p-4 rounded-sm ${
                   isSelected ? "text-white bg-[#1D1F22]" : "text-[#1D1F22]"
-                }`}
+                } ${this.props.size === "sm" && "text-xs !w-10 !h-8 p-2"}`}
                 onClick={() => {
                   this.setState({
                     selectedTextAttributeId: attributeItem.id,
