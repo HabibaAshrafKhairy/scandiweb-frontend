@@ -186,6 +186,6 @@ function showOrderToast(response?: PlaceOrderResponse) {
         </div>
       </div>
     ),
-    { duration: Infinity }
+    { duration: 10000 }
   );
 }
