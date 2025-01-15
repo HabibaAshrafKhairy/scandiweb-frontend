@@ -40,7 +40,7 @@ class ProductsListPage extends React.Component<CombinedProps> {
 
     return (
       <div className="py-4 md:py-20">
-        <h1 className="text-base md:text-[42px] pb-4 md:pb-24">
+        <h1 className="text-lg md:text-[42px] pb-4 md:pb-24">
           {capitalizeFirstLetter(params.category)}
         </h1>
 
