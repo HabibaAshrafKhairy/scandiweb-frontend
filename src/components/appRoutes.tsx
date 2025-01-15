@@ -20,19 +20,9 @@ class AppRoutes extends React.Component<GraphQLProps> {
 
     return (
       <Routes>
-        <Route
-          path="/"
-          element={<Navigate to={`/products/${defaultCategory}`} />}
-        />
-        <Route
-          path="/products/"
-          element={<Navigate to={`/products/${defaultCategory}`} />}
-        />
-        <Route path="products/:category" element={<ProductsListPage />} />
-        <Route
-          path="products/:category/:productId"
-          element={<ProductDetailsPage />}
-        />
+        <Route path="/" element={<Navigate to={`/${defaultCategory}`} />} />
+        <Route path="/:category" element={<ProductsListPage />} />
+        <Route path="/:category/:productId" element={<ProductDetailsPage />} />
       </Routes>
     );
   }

@@ -28,12 +28,12 @@ class Navigation extends React.Component<CombinedProps> {
     closeMobileNav?: () => void
   ) {
     return categories.map((category) => {
-      const isActive = pathname.includes(`products/${category.name}`);
+      const isActive = pathname.includes(`${category.name}`);
 
       return (
         <li key={category.id}>
           <Link
-            to={`products/${category.name}`}
+            to={`${category.name}`}
             className={`text-base lg:pb-7 lg:px-4 lg:border-b-2 ${
               isActive
                 ? "text-[#5ECE7B] border-[#5ECE7B]"
