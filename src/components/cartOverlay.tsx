@@ -78,7 +78,7 @@ class CartOverlay extends React.Component<CombinedProps> {
     );
 
     return (
-      <div className="absolute w-full md:w-1/2 lg:w-1/4 top-full right-0 px-4 py-8 flex flex-col gap-8 z-30 bg-white">
+      <div className="absolute w-full md:w-1/2 lg:w-1/4 top-full right-0 px-4 py-8 flex flex-col gap-8 z-30 bg-white rounded-md">
         <div className="flex flex-col gap-8">
           <p className="font-bold">
             My Bag,{" "}
@@ -107,7 +107,7 @@ class CartOverlay extends React.Component<CombinedProps> {
           </div>
 
           <button
-            className="p-3 text-base font-semibold text-white bg-[#5ECE7B] disabled:bg-slate-400"
+            className="p-3 text-base font-semibold text-white bg-[#5ECE7B] disabled:bg-slate-400 rounded-lg"
             disabled={cartInfo.totalCount === 0}
             onClick={this.handlePlaceOrder}
           >

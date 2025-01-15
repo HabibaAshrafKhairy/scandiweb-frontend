@@ -123,7 +123,7 @@ class ProductDetailsPage extends React.Component<CombinedProps, StateType> {
           <ProductPrice price={product?.price} />
 
           <button
-            className="p-4 text-base font-semibold text-white bg-[#5ECE7B] disabled:bg-slate-400"
+            className="p-4 text-base font-semibold text-white bg-[#5ECE7B] disabled:bg-slate-400 rounded-lg"
             data-testid="add-to-cart"
             onClick={() => {
               if (!addToCart) return;

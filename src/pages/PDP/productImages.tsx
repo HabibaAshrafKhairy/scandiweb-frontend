@@ -29,7 +29,7 @@ class ProductImages extends React.Component<PropsType, State> {
           {imageLinks.map((link, index) => (
             <div
               key={index}
-              className={`flex-shrink-0 w-20 h-20 cursor-pointer transition-all duration-300 ${
+              className={`flex-shrink-0 w-20 h-20 cursor-pointer transition-all duration-300 rounded-md ${
                 this.state.selectedImageIndex === index
                   ? "border-2 border-[#5ECE7B]"
                   : ""
@@ -41,13 +41,13 @@ class ProductImages extends React.Component<PropsType, State> {
               <img
                 src={link}
                 alt={`Product ${index + 1}`}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover rounded-md"
               />
             </div>
           ))}
         </div>
 
-        <div className="w-full max-h-[50vh] aspect-square bg-[#fcfbfc]  relative transition-all duration-300 ">
+        <div className="w-full max-h-[50vh] aspect-square bg-[#fcfbfc]  relative transition-all duration-300 rounded-xl">
           {/* left arrow */}
           <div
             onClick={() => {
@@ -58,7 +58,7 @@ class ProductImages extends React.Component<PropsType, State> {
                 };
               });
             }}
-            className="absolute w-8 h-8 bg-[#000000BA] flex items-center justify-center top-1/2 -translate-y-1/2 left-4 cursor-pointer"
+            className="absolute w-8 h-8 bg-[#000000BA] flex items-center justify-center top-1/2 -translate-y-1/2 left-4 cursor-pointer rounded-md"
           >
             <img src={leftArrow} alt="left arrow" />
           </div>
@@ -66,7 +66,7 @@ class ProductImages extends React.Component<PropsType, State> {
           <img
             src={imageLinks[this.state.selectedImageIndex]}
             alt="product image"
-            className="w-full h-full object-contain"
+            className="w-full h-full object-contain rounded-lg"
           />
 
           {/* right arrow */}
@@ -79,7 +79,7 @@ class ProductImages extends React.Component<PropsType, State> {
                 };
               });
             }}
-            className="absolute w-8 h-8 bg-[#000000BA] flex items-center justify-center top-1/2 -translate-y-1/2 right-4 cursor-pointer rotate-180"
+            className="absolute w-8 h-8 bg-[#000000BA] flex items-center justify-center top-1/2 -translate-y-1/2 right-4 cursor-pointer rotate-180 rounded-md"
           >
             <img src={leftArrow} alt="left arrow" />
           </div>

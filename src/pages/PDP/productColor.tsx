@@ -62,7 +62,7 @@ class ProductColor extends React.Component<PropsType, State> {
                 key={color.id}
                 disabled={isCartItem}
                 style={{ backgroundColor: color.value }}
-                className={`w-8 h-8 ${
+                className={`w-8 h-8 rounded-sm ${
                   isSelected
                     ? "ring-2 ring-[#5ECE7B] ring-offset-2 ring-offset-white"
                     : "border border-gray-300"

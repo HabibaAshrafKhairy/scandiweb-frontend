@@ -31,12 +31,12 @@ class ProductCard extends React.Component<CombinedProps> {
         data-testid={`product-${toKebabCase(product.name)}`}
         className={`p-4 w-full h-full flex flex-col !max-w-96 relative ${
           product.in_stock &&
-          "hover:shadow-card transition-shadow duration-300 hover:cursor-pointer"
+          "hover:shadow-card transition-shadow duration-300 hover:cursor-pointer rounded-xl"
         }`}
       >
         <div className="pb-6 group">
           <img
-            className="w-full"
+            className="w-full rounded-sm"
             src={`${product.gallery.length > 0 && product.gallery[0]}`}
             alt="product image"
           />

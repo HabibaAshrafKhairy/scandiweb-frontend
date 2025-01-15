@@ -58,7 +58,7 @@ class CartProduct extends React.Component<CartProps> {
 
           <div className="ml-auto flex flex-col justify-between text-base font-normal">
             <button
-              className="w-6 h-6 items-center justify-center border border-[#1D1F22]"
+              className="w-6 h-6 items-center justify-center border border-[#1D1F22] rounded-sm"
               onClick={() => {
                 addToCart(cartItem);
               }}
@@ -70,7 +70,7 @@ class CartProduct extends React.Component<CartProps> {
               {cartItem.amount}
             </p>
             <button
-              className="w-6 h-6 items-center justify-center border border-[#1D1F22]"
+              className="w-6 h-6 items-center justify-center border border-[#1D1F22] rounded-sm"
               onClick={() => {
                 removeFromCart({
                   id: cartItem.id,
@@ -88,7 +88,7 @@ class CartProduct extends React.Component<CartProps> {
           <img
             src={cartItem.gallery && cartItem.gallery[0]}
             alt="product image"
-            className="w-full h-full object-contain"
+            className="w-full h-full object-contain rounded-md"
           />
         </div>
       </div>
