@@ -22,10 +22,11 @@ class ProductImages extends React.Component<PropsType, State> {
 
     return (
       <div
-        className="grid grid-cols-[auto,1fr] gap-x-10"
+        className="grid md:grid-cols-[auto,1fr] gap-x-10 gap-y-5"
         data-testid="product-gallery"
       >
-        <div className="flex flex-col gap-5  max-h-[50vh] overflow-y-auto">
+        {/* Thumbnails Gallery (On the Left for Larger Screens) */}
+        <div className="flex md:flex-col gap-5 md:max-h-[50vh] md:overflow-y-auto overflow-x-auto px-2">
           {imageLinks.map((link, index) => (
             <div
               key={index}
@@ -47,8 +48,9 @@ class ProductImages extends React.Component<PropsType, State> {
           ))}
         </div>
 
-        <div className="w-full max-h-[50vh] aspect-square bg-[#fcfbfc]  relative transition-all duration-300 rounded-xl">
-          {/* left arrow */}
+        {/* Main Image */}
+        <div className="w-full md:max-h-[50vh] aspect-square bg-[#fcfbfc] relative transition-all duration-300 rounded-xl mx-auto">
+          {/* Left Arrow */}
           <div
             onClick={() => {
               this.setState((prev) => {
@@ -58,7 +60,7 @@ class ProductImages extends React.Component<PropsType, State> {
                 };
               });
             }}
-            className="absolute w-8 h-8 bg-[#000000BA] flex items-center justify-center top-1/2 -translate-y-1/2 left-4 cursor-pointer rounded-md"
+            className="absolute w-8 h-8 bg-[#000000BA] flex items-center justify-center top-1/2 -translate-y-1/2 left-4 cursor-pointer rounded-md z-10"
           >
             <img src={leftArrow} alt="left arrow" />
           </div>
@@ -69,7 +71,7 @@ class ProductImages extends React.Component<PropsType, State> {
             className="w-full h-full object-contain rounded-lg"
           />
 
-          {/* right arrow */}
+          {/* Right Arrow */}
           <div
             onClick={() => {
               this.setState((prev) => {
@@ -79,7 +81,7 @@ class ProductImages extends React.Component<PropsType, State> {
                 };
               });
             }}
-            className="absolute w-8 h-8 bg-[#000000BA] flex items-center justify-center top-1/2 -translate-y-1/2 right-4 cursor-pointer rotate-180 rounded-md"
+            className="absolute w-8 h-8 bg-[#000000BA] flex items-center justify-center top-1/2 -translate-y-1/2 right-4 cursor-pointer rotate-180 rounded-md z-10"
           >
             <img src={leftArrow} alt="left arrow" />
           </div>
