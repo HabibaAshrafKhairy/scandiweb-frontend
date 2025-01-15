@@ -13,7 +13,12 @@ class ProductImages extends React.Component<PropsType, State> {
   constructor(props: PropsType) {
     super(props);
     this.state = { selectedImageIndex: 0 };
+    this.thumbnailRefs = props.imageLinks.map(() =>
+      React.createRef<HTMLDivElement>()
+    );
   }
+
+  thumbnailRefs: React.RefObject<HTMLDivElement>[];
 
   render(): React.ReactNode {
     const { imageLinks } = this.props;
@@ -32,6 +37,7 @@ class ProductImages extends React.Component<PropsType, State> {
         <div className="flex md:flex-col gap-5 md:max-h-[50vh] md:overflow-y-auto overflow-x-auto px-2">
           {imageLinks.map((link, index) => (
             <div
+              ref={this.thumbnailRefs[index]}
               key={index}
               className={`flex-shrink-0 w-20 h-20 cursor-pointer transition-all duration-300 rounded-md ${
                 this.state.selectedImageIndex === index
@@ -40,6 +46,11 @@ class ProductImages extends React.Component<PropsType, State> {
               }`}
               onClick={() => {
                 this.setState({ selectedImageIndex: index });
+                this.thumbnailRefs[index].current?.scrollIntoView({
+                  behavior: "smooth",
+                  block: "nearest",
+                  inline: "center", // Centers the thumbnail in the container
+                });
               }}
             >
               <img
@@ -57,12 +68,24 @@ class ProductImages extends React.Component<PropsType, State> {
           <button
             disabled={isFirstImage}
             onClick={() => {
-              this.setState((prev) => {
-                if (prev.selectedImageIndex === 0) return;
-                return {
-                  selectedImageIndex: prev.selectedImageIndex - 1,
-                };
-              });
+              this.setState(
+                (prev) => {
+                  if (prev.selectedImageIndex === 0) return;
+                  return {
+                    selectedImageIndex: prev.selectedImageIndex - 1,
+                  };
+                },
+                () => {
+                  // Scroll the selected thumbnail into view after state update
+                  this.thumbnailRefs[
+                    this.state.selectedImageIndex
+                  ].current?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest",
+                    inline: "center",
+                  });
+                }
+              );
             }}
             className={`absolute w-8 h-8 bg-[#000000BA] flex items-center justify-center top-1/2 -translate-y-1/2 left-4 cursor-pointer rounded-md z-10 ${
               isFirstImage ? "bg-[#D3D3D3]" : ""
@@ -81,12 +104,24 @@ class ProductImages extends React.Component<PropsType, State> {
           <button
             disabled={isLastImage}
             onClick={() => {
-              this.setState((prev) => {
-                if (prev.selectedImageIndex === imageLinks.length - 1) return;
-                return {
-                  selectedImageIndex: prev.selectedImageIndex + 1,
-                };
-              });
+              this.setState(
+                (prev) => {
+                  if (prev.selectedImageIndex === imageLinks.length - 1) return;
+                  return {
+                    selectedImageIndex: prev.selectedImageIndex + 1,
+                  };
+                },
+                () => {
+                  // Scroll the selected thumbnail into view after state update
+                  this.thumbnailRefs[
+                    this.state.selectedImageIndex
+                  ].current?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest",
+                    inline: "center",
+                  });
+                }
+              );
             }}
             className={`absolute w-8 h-8 bg-[#000000BA] flex items-center justify-center top-1/2 -translate-y-1/2 right-4 cursor-pointer rotate-180 rounded-md z-10 ${
               isLastImage ? "bg-[#D3D3D3]" : ""
