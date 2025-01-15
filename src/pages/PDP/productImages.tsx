@@ -13,7 +13,6 @@ class ProductImages extends React.Component<PropsType, State> {
   constructor(props: PropsType) {
     super(props);
     this.state = { selectedImageIndex: 0 };
-    // Create refs for each thumbnail to scroll into view when selected
     this.thumbnailRefs = props.imageLinks.map(() =>
       React.createRef<HTMLDivElement>()
     );
@@ -22,12 +21,10 @@ class ProductImages extends React.Component<PropsType, State> {
   thumbnailRefs: React.RefObject<HTMLDivElement>[];
 
   componentDidMount() {
-    // Add the keydown event listener when the component mounts
     window.addEventListener("keydown", this.handleKeyDown);
   }
 
   componentWillUnmount() {
-    // Clean up the keydown event listener when the component unmounts
     window.removeEventListener("keydown", this.handleKeyDown);
   }
 
@@ -36,145 +33,118 @@ class ProductImages extends React.Component<PropsType, State> {
     const { imageLinks } = this.props;
 
     if (event.key === "ArrowLeft" && selectedImageIndex > 0) {
-      // Go to the previous image
-      this.setState({ selectedImageIndex: selectedImageIndex - 1 }, () => {
-        this.thumbnailRefs[
-          this.state.selectedImageIndex
-        ].current?.scrollIntoView({
-          behavior: "smooth",
-          block: "nearest",
-          inline: "center",
-        });
-      });
+      this.changeImage(selectedImageIndex - 1);
     }
 
     if (
       event.key === "ArrowRight" &&
       selectedImageIndex < imageLinks.length - 1
     ) {
-      // Go to the next image
-      this.setState({ selectedImageIndex: selectedImageIndex + 1 }, () => {
-        this.thumbnailRefs[
-          this.state.selectedImageIndex
-        ].current?.scrollIntoView({
-          behavior: "smooth",
-          block: "nearest",
-          inline: "center",
-        });
-      });
+      this.changeImage(selectedImageIndex + 1);
     }
   };
 
-  render(): React.ReactNode {
+  changeImage = (newIndex: number) => {
+    this.setState({ selectedImageIndex: newIndex }, () => {
+      this.scrollThumbnailIntoView(newIndex);
+    });
+  };
+
+  scrollThumbnailIntoView = (index: number) => {
+    this.thumbnailRefs[index].current?.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+      inline: "center",
+    });
+  };
+
+  renderArrowButton = (
+    direction: "left" | "right",
+    disabled: boolean,
+    onClick: () => void
+  ) => {
+    const isLeftArrow = direction === "left";
+    const arrowClass = isLeftArrow ? "" : "rotate-180";
+    const disabledClass = disabled ? "bg-[#D3D3D3]" : "";
+
+    return (
+      <button
+        disabled={disabled}
+        onClick={onClick}
+        className={`absolute w-8 h-8 bg-[#000000BA] flex items-center justify-center top-1/2 -translate-y-1/2 ${
+          isLeftArrow ? "left-4" : "right-4"
+        } cursor-pointer ${arrowClass} rounded-md z-10 ${disabledClass}`}
+      >
+        <img src={leftArrow} alt={`${direction} arrow`} />
+      </button>
+    );
+  };
+
+  renderThumbnails() {
     const { imageLinks } = this.props;
 
-    if (!imageLinks || imageLinks.length === 0) return;
+    return imageLinks.map((link, index) => {
+      const isSelected = this.state.selectedImageIndex === index;
 
-    const isLastImage = this.state.selectedImageIndex === imageLinks.length - 1;
-    const isFirstImage = this.state.selectedImageIndex === 0;
+      return (
+        <div
+          key={index}
+          ref={this.thumbnailRefs[index]}
+          className={`flex-shrink-0 w-20 h-20 cursor-pointer transition-all duration-300 rounded-md ${
+            isSelected ? "border-2 border-[#5ECE7B]" : ""
+          }`}
+          onClick={() => {
+            this.setState({ selectedImageIndex: index });
+            this.scrollThumbnailIntoView(index);
+          }}
+        >
+          <img
+            src={link}
+            alt={`Product ${index + 1}`}
+            className="w-full h-full object-cover rounded-md"
+          />
+        </div>
+      );
+    });
+  }
+
+  render() {
+    const { imageLinks } = this.props;
+    const { selectedImageIndex } = this.state;
+
+    if (!imageLinks || imageLinks.length === 0) return null;
+
+    const isFirstImage = selectedImageIndex === 0;
+    const isLastImage = selectedImageIndex === imageLinks.length - 1;
 
     return (
       <div
         className="grid md:grid-cols-[auto,1fr] gap-x-10 gap-y-5"
         data-testid="product-gallery"
-        tabIndex={0} // Make the container focusable for keyboard events
+        tabIndex={0}
       >
         {/* Thumbnails Gallery */}
         <div className="flex md:flex-col gap-5 md:max-h-[50vh] md:overflow-y-auto overflow-x-auto px-2">
-          {imageLinks.map((link, index) => (
-            <div
-              key={index}
-              ref={this.thumbnailRefs[index]}
-              className={`flex-shrink-0 w-20 h-20 cursor-pointer transition-all duration-300 rounded-md ${
-                this.state.selectedImageIndex === index
-                  ? "border-2 border-[#5ECE7B]"
-                  : ""
-              }`}
-              onClick={() => {
-                this.setState({ selectedImageIndex: index });
-                this.thumbnailRefs[index].current?.scrollIntoView({
-                  behavior: "smooth",
-                  block: "nearest",
-                  inline: "center",
-                });
-              }}
-            >
-              <img
-                src={link}
-                alt={`Product ${index + 1}`}
-                className="w-full h-full object-cover rounded-md"
-              />
-            </div>
-          ))}
+          {this.renderThumbnails()}
         </div>
 
         {/* Main Image */}
         <div className="w-full md:max-h-[50vh] aspect-square bg-[#fcfbfc] relative transition-all duration-300 rounded-xl mx-auto">
           {/* Left Arrow */}
-          <button
-            disabled={isFirstImage}
-            onClick={() => {
-              this.setState(
-                (prev) => {
-                  if (prev.selectedImageIndex === 0) return;
-                  return {
-                    selectedImageIndex: prev.selectedImageIndex - 1,
-                  };
-                },
-                () => {
-                  // Scroll the selected thumbnail into view after state update
-                  this.thumbnailRefs[
-                    this.state.selectedImageIndex
-                  ].current?.scrollIntoView({
-                    behavior: "smooth",
-                    block: "nearest",
-                    inline: "center",
-                  });
-                }
-              );
-            }}
-            className={`absolute w-8 h-8 bg-[#000000BA] flex items-center justify-center top-1/2 -translate-y-1/2 left-4 cursor-pointer rounded-md z-10 ${
-              isFirstImage ? "bg-[#D3D3D3]" : ""
-            }`}
-          >
-            <img src={leftArrow} alt="left arrow" />
-          </button>
+          {this.renderArrowButton("left", isFirstImage, () =>
+            this.changeImage(selectedImageIndex - 1)
+          )}
 
           <img
-            src={imageLinks[this.state.selectedImageIndex]}
+            src={imageLinks[selectedImageIndex]}
             alt="product image"
             className="w-full h-full object-contain rounded-lg"
           />
 
           {/* Right Arrow */}
-          <button
-            disabled={isLastImage}
-            onClick={() => {
-              this.setState(
-                (prev) => {
-                  if (prev.selectedImageIndex === imageLinks.length - 1) return;
-                  return {
-                    selectedImageIndex: prev.selectedImageIndex + 1,
-                  };
-                },
-                () => {
-                  // Scroll the selected thumbnail into view after state update
-                  this.thumbnailRefs[
-                    this.state.selectedImageIndex
-                  ].current?.scrollIntoView({
-                    behavior: "smooth",
-                    block: "nearest",
-                    inline: "center",
-                  });
-                }
-              );
-            }}
-            className={`absolute w-8 h-8 bg-[#000000BA] flex items-center justify-center top-1/2 -translate-y-1/2 right-4 cursor-pointer rotate-180 rounded-md z-10 ${
-              isLastImage ? "bg-[#D3D3D3]" : ""
-            }`}
-          >
-            <img src={leftArrow} alt="left arrow" />
-          </button>
+          {this.renderArrowButton("right", isLastImage, () =>
+            this.changeImage(selectedImageIndex + 1)
+          )}
         </div>
       </div>
     );
