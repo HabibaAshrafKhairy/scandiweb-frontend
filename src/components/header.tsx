@@ -73,9 +73,9 @@ class Header extends React.Component<CartProps, State> {
           className="relative"
           data-testid="cart-btn"
         >
-          <img src={cartIcon} alt="cart icon" className="h-4 lg:h-6" />
+          <img src={cartIcon} alt="cart icon" className="h-6" />
           {cartInfo.totalCount > 0 && (
-            <div className="absolute bottom-1/3 left-[80%] w-4 h-4 md:w-6 md:h-6 bg-[#1D1F22] rounded-full flex items-center justify-center text-xs md:text-sm text-white font-bold">
+            <div className="absolute bottom-1/3 left-[80%] w-6 h-6 bg-[#1D1F22] rounded-full flex items-center justify-center text-xs md:text-sm text-white font-bold">
               {cartInfo.totalCount}
             </div>
           )}
