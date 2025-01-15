@@ -62,12 +62,8 @@ class Header extends React.Component<CartProps, State> {
 
         {/* Logo */}
         <Link to="/products/">
-          <div className="absolute  left-1/2">
-            <img
-              src={logo}
-              alt="logo"
-              className="h-8 lg:h-10 mx-auto lg:mx-0"
-            />
+          <div className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2">
+            <img src={logo} alt="logo" />
           </div>
         </Link>
 
